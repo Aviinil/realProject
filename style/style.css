@@ -1,0 +1,194 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto&display=swap);
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  max-width: 2000px;
+  font-family :'Roboto', sans-serif;
+}
+path {
+  fill: salmon;
+}
+
+.delete-icon {
+  position: absolute;
+  right: 0;
+  top: 1%;
+}
+.delete-icon path {
+  fill:#4F4F4F;
+}
+.container__connexion {
+  flex-direction: column;
+  width: 300px;
+  margin: 20px auto;
+  flex-basis: auto;
+  padding-top: 10%;
+}
+.container__connexion input {
+  margin-bottom: 20px;
+}
+.erreur-connexion {
+  color: red;
+}
+
+header {
+  margin: 200px 0 ;
+}
+
+.completed {
+  color: #3aa16f;
+  text-align: center;
+}
+input {
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+}
+.Button {
+  background-color: salmon;
+  color : white;
+  text-decoration:none;
+  
+}
+
+.div__links {
+    text-align: center;
+}
+.links {
+  color: salmon;
+  text-decoration: none;
+  padding-bottom: 10px;
+}
+
+.container__accueil {
+  display: flex;
+  flex-direction: row;
+  width: 1800px;
+  min-height: 800px;
+  
+}
+
+.sidebar {
+  flex-basis: 20%;
+  background-color: #F5F5F5;
+  padding: 10px;
+  flex-direction: row;
+}
+.sidebar > div > span {
+  font-size: 0.9em;
+  font-weight: bold;
+}
+
+.menu__top {
+
+  padding-top: 10%;
+  padding-bottom: 15%;
+}
+
+h6 {
+  position: relative;
+  width: 95%;
+  font-weight: bolder;
+}
+.sidebar_liste:after {
+  position: absolute;
+  content: "";
+  height: 1px;
+  background-color: grey;
+  width: 65%;
+  
+  margin-left: 15px;
+  top: 50%;
+}
+.titres {
+  display: flex;
+  flex-direction: column;
+}
+.titre-liste {
+  display: flex;
+  padding-top: 5%;
+  flex-basis: 90%;
+  cursor: pointer;
+}
+.titre-liste h6 {
+  padding-top: 1%;
+  padding-left: 5%;
+}
+/* CHANGER LA MARGIN C PAS BON <============================================ */
+.compteur {
+  background-color: salmon;
+  color: white;
+  margin-left: 70% ;
+  padding: 1% 2.5% 0;
+  border-radius: 15%;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+.main {
+  flex-basis: 85%;
+  background-color: #FDFDFD;
+}
+.main h2 {
+  font-weight: bold;
+}
+
+
+ .container {
+  display: block;
+  position: relative;
+  left: 0;
+
+  margin-bottom: 12px;
+  cursor: pointer;
+ 
+}
+
+/* Hide the browser's default radio button */
+input[type=checkbox] {
+  position: absolute;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  margin-left: 10px;
+  
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+
+/* On mouse-over, add a grey background color */
+input[type=checkbox]:hover {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a salmon background */
+input[type=checkbox]:checked  {
+  background-color: salmon;
+  background-image: url('../assets/check.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+
+.taches-liste{
+ display: flex;
+ flex-direction: column;
+ 
+}
+.taches-liste-unique {
+
+flex-basis: 70%;
+}
+.sidebar--taches {
+  flex-basis: 30%;
+}
+.container-nom-tache {
+  font-size: larger;
+}
+
