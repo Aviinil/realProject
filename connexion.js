@@ -45,7 +45,7 @@ function Connexion() {
                         <p>
                             <label htmlFor="email"> Adresse e-mail </label>
                             <br/>
-                            <input type="text" name="email" className ="input-mail" placeholder="mail@provider.com"
+                            <input type="email" name="email" className ="input-mail" placeholder="mail@provider.com"
                              required onChange={VerifierMail}></input>
                             <span className="erreur-connexion erreur-connexion-mail"></span>
                         </p>
@@ -83,7 +83,7 @@ function Inscription() {
                         <p>
                             <label htmlFor="email"> Adresse e-mail </label>
                             <br/>
-                            <input type="text" name="email" className ="input-mail" placeholder="mail@provider.com" 
+                            <input type="email" name="email" className ="input-mail" placeholder="mail@provider.com" 
                             required onChange={VerifierMail}></input>
                             <span className="erreur-connexion erreur-connexion-mail"></span>
                         </p>

@@ -13,9 +13,13 @@ path {
 }
 
 .delete-icon {
-  position: absolute;
+  flex-basis: auto;
   right: 0;
   top: 1%;
+}
+.delete-div {
+  margin-left: auto;
+  cursor: pointer;
 }
 .delete-icon path {
   fill:#4F4F4F;
@@ -55,6 +59,8 @@ input {
   
 }
 
+  
+
 .div__links {
     text-align: center;
 }
@@ -76,7 +82,10 @@ input {
   flex-basis: 20%;
   background-color: #F5F5F5;
   padding: 10px;
-  flex-direction: row;
+  flex-direction: column;
+  display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
 }
 .sidebar > div > span {
   font-size: 0.9em;
@@ -84,7 +93,7 @@ input {
 }
 
 .menu__top {
-
+  flex-direction: column;
   padding-top: 10%;
   padding-bottom: 15%;
 }
@@ -99,7 +108,7 @@ h6 {
   content: "";
   height: 1px;
   background-color: grey;
-  width: 65%;
+  width: 70%;
   
   margin-left: 15px;
   top: 50%;
@@ -122,18 +131,19 @@ h6 {
 .compteur {
   background-color: salmon;
   color: white;
-  margin-left: 70% ;
+  margin-left: auto ;
   padding: 1% 2.5% 0;
   border-radius: 15%;
   font-size: 0.8em;
   font-weight: bold;
 }
 .main {
-  flex-basis: 85%;
+  flex-grow: 1;
   background-color: #FDFDFD;
 }
 .main h2 {
   font-weight: bold;
+  margin-left: 10px;
 }
 
 
@@ -149,12 +159,13 @@ h6 {
 
 /* Hide the browser's default radio button */
 input[type=checkbox] {
-  position: absolute;
+  
   cursor: pointer;
   -webkit-appearance: none;
   -moz-appearance: none;
-  margin-left: 10px;
+  margin-left: auto;
   
+  border: 1px solid #ccc;
   height: 25px;
   width: 25px;
   background-color: #eee;
@@ -182,13 +193,48 @@ input[type=checkbox]:checked  {
  
 }
 .taches-liste-unique {
+display: flex;
+border-top: 1px solid #ccc;
+margin-left: 10px;
+}
+.tache-finale {
+  border-bottom: 1px solid #ccc;
+  margin-left: 10px;
+}
 
-flex-basis: 70%;
-}
-.sidebar--taches {
-  flex-basis: 30%;
-}
 .container-nom-tache {
   font-size: larger;
+  cursor: pointer;
+}
+.tache-unique {
+  display: flex;
+  width: 100%;
+  margin-bottom: 12px;
+  padding:0 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.tache__text__note {
+  height: 150px;
+  border-radius: 5px;
+}
+fieldset {
+  margin-bottom: 20px;
+  
+}
+.calendar {
+display: flex;
+
 }
 
+.zone__button {
+  display: flex;
+}
+.zone__button .Button {
+  flex-basis: 40%;
+  flex-grow: 1;
+
+}
+.zone__button .Button:first-child {
+  margin-right: 5%;
+}
