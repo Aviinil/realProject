@@ -28,6 +28,7 @@
     "lowdb": "^1.0.0",
     "popper.js": "^1.16.1",
     "react": "^16.13.1",
+    "react-bootstrap": "^1.0.0",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "reactdom": "^2.0.0",

@@ -2,7 +2,7 @@
   "listes": [
     {
       "id": "1",
-      "titre": "coucou",
+      "titre": "Coucou",
       "content": "something interesting",
       "taches": [
         {
@@ -14,7 +14,7 @@
     },
     {
       "id": "2",
-      "titre": "yeah",
+      "titre": "Yeah",
       "content": "something else !",
       "taches": [
         {
