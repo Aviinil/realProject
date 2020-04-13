@@ -12,3 +12,9 @@ let appElement = document.querySelector('#app');
 
 //SI AUTHENTIFIE
 ReactDOM.render(<ListeTaches />, appElement);
+
+export function LogOut() {
+    
+    // ajouter ce qu'il faudra pour assurer une vraie deconnexion
+    ReactDOM.render(<NonAuth />, appElement);
+}

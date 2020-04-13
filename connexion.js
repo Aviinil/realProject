@@ -59,7 +59,7 @@ function Connexion() {
                         <p>
                             <input type="submit" value="Connexion" className="Button"></input>
                         </p>
-                        </form>
+                    </form>
                 
                     <div className="div__links"><Link className="links" to="/mdpOublie">J'ai oublié mon mot de passe.</Link></div>
                     <br/>
@@ -118,7 +118,7 @@ function MdpOublie() {
 
 }
 
-function VerifierMail() {
+export function VerifierMail() {
     let mail = document.querySelector('.erreur-connexion-mail');
     let inputMail = document.querySelector('.input-mail');
     if(inputMail.value == "")

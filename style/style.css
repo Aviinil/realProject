@@ -55,7 +55,7 @@ input {
   
 }
 
-  
+
 
 .div__links {
     text-align: center;
@@ -65,11 +65,14 @@ input {
   text-decoration: none;
   padding-bottom: 10px;
 }
-
+.links:hover {
+  text-decoration: none;
+  color: rgb(250, 79, 60);
+} 
 .container__accueil {
   display: flex;
   flex-direction: row;
-  min-height: 800px;
+  min-height: 700px;
   
 }
 
@@ -91,6 +94,9 @@ input {
   flex-direction: column;
   padding-top: 10%;
   padding-bottom: 15%;
+}
+.menu__top svg:hover {
+  cursor: pointer;
 }
 
 h6 {
@@ -122,7 +128,7 @@ h6 {
   padding-top: 1%;
   padding-left: 5%;
 }
-/* CHANGER LA MARGIN C PAS BON <============================================ */
+
 .compteur {
   background-color: salmon;
   color: white;
@@ -132,6 +138,27 @@ h6 {
   font-size: 0.8em;
   font-weight: bold;
 }
+
+.sidebar-bottom {
+  margin-top: auto;
+}
+.param-logout-link {
+  display: flex;
+  margin: 4%;
+  cursor: pointer;
+}
+.param-logout-link:hover {
+  text-decoration: none;
+}
+.param-logout-link svg {
+  margin-right: 4%;
+}
+.param-logout-link h6 {
+  padding-top:1%;
+  color: black;
+}
+
+
 .main {
   flex-grow: 1;
   background-color: #FDFDFD;
@@ -377,4 +404,18 @@ fieldset textarea {
 }
 h4 {
   font-weight: 900;
+}
+
+/* ========== Page de parametres =========== */
+.parametres {
+  margin: 60px 20px;
+  width: 350px;
+}
+.parametres h4 {
+  margin-top: 20%;
+  margin-bottom: 10%;
+}
+.parametres--mail-actuel {
+
+  margin-bottom: 5%;
 }
