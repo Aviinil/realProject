@@ -27,7 +27,7 @@ CREATE TABLE listes
 (
   IDlistes INTEGER,
   titre VARCHAR(20),
-  contentemail VARCHAR(20)
+  content VARCHAR(20)
 );
 
 CREATE SEQUENCE SeqIDlistes START WITH 20000 INCREMENT BY 10;
@@ -36,7 +36,9 @@ ALTER TABLE listes ADD (IDutilisateurs INTEGER);
 ALTER TABLE listes MODIFY (IDutilisateurs INTEGER CONSTRAINT FK_IDutilisateurs REFERENCES utilisateurs(IDutilisateurs));
 ALTER TABLE listes MODIFY (IDutilisateurs NOT NULL);
 
-INSERT INTO listes(IDlistes, titre, contentemail, IDutilisateurs) VALUES (SeqIDlistes.NEXTVAL, 'liste de test', 'hein', 10000);
+-- Ces 2 listes appartiennent à l'utilisateur "test"(numero 10000)
+INSERT INTO listes(IDlistes, titre, content, IDutilisateurs) VALUES (SeqIDlistes.NEXTVAL, 'Coucou', 'something interesting', 10000);
+INSERT INTO listes(IDlistes, titre, content, IDutilisateurs) VALUES (SeqIDlistes.NEXTVAL, 'Yeah', 'something else !', 10000);
 
 -- création table taches
 CREATE TABLE taches 
@@ -51,6 +53,8 @@ ALTER TABLE taches ADD (IDlistes INTEGER);
 ALTER TABLE taches MODIFY (IDlistes INTEGER CONSTRAINT FK_IDlistes REFERENCES listes(IDlistes));
 ALTER TABLE taches MODIFY (IDlistes NOT NULL);
 
-INSERT INTO taches(IDtaches, contenuTache, IDlistes) VALUES (SeqIDtaches.NEXTVAL, 'commencer le projet', 20000);
-INSERT INTO taches(IDtaches, contenuTache, IDlistes) VALUES (SeqIDtaches.NEXTVAL, 'travailler le projet', 20000);
-INSERT INTO taches(IDtaches, contenuTache, IDlistes) VALUES (SeqIDtaches.NEXTVAL, 'chier sur le projet', 20000);
+-- Tache appartenant à la liste "coucou"
+INSERT INTO taches(IDtaches, contenuTache, IDlistes) VALUES (SeqIDtaches.NEXTVAL, 'Finir le projet', 20000);
+-- Tache appartenant à la liste "Yeah"
+INSERT INTO taches(IDtaches, contenuTache, IDlistes) VALUES (SeqIDtaches.NEXTVAL, 'Bosser le projet', 20010);
+INSERT INTO taches(IDtaches, contenuTache, IDlistes) VALUES (SeqIDtaches.NEXTVAL, 'En chier pour le projet', 20010);
