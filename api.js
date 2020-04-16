@@ -1,4 +1,6 @@
-
+const getSQL = require("./getSQL/SQL"); // pour moi quand je créerai des fonctions -- Jack
+const express = require("express"); // pour moi quand je créerai des fonctions -- Jack
+const router = express.Router(); // pour moi quand je créerai des fonctions -- Jack
 
 const BASE_URL = // URL de la BD
 
@@ -27,6 +29,7 @@ export async function getList() {
   let data = await response.json()
   return data
 }
+
 
 export async function createItem(item) {
   // 👉 Faire une requête POST sur l'URL http://localhost:3000/posts grâce à
