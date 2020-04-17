@@ -6,5 +6,4 @@ module.exports = {
 		password: "ZfVrm-zcjzU6pJ3y7_QDoUhzWooWo-m0",
 		port: 5432
 	},
-	secret: "thecakeisalie"
 };

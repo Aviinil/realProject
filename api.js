@@ -22,9 +22,9 @@ export async function getList() {
   return data
 }*/
 
-export async function getList() {
+export async function getList(param) {
 
-  let response = await fetch('http://localhost:3000/listes');
+  let response = await getSQL.getListesFromUtilisateur(param, );
  
   let data = await response.json()
   return data
