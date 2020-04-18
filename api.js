@@ -22,12 +22,21 @@ export async function getList() {
   return data
 }*/
 
-export async function getList(param) {
+// Alors là, c'est purement experimentale comme fonction, hein! :)
+export async function getList(IDutilisateurs) {
 
-  let response = await getSQL.getListesFromUtilisateur(param, );
- 
-  let data = await response.json()
-  return data
+  getSQL.getListesFromUtilisateur(IDutilisateurs, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: err });
+      return;
+    }
+    else {
+      response = result;
+    }
+
+    let data = await response.json()
+    return data;
+  });
 }
 
 
