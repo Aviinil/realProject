@@ -1,8 +1,11 @@
+import { CloseTask} from './mobile'
+
 export function BarreTache(props) {
       
     return (
-        <div className="sidebar">
+        <div className="sidebar right-sidebar">
             <fieldset>
+                <div className="close-mobile close-task-mobile" onClick={CloseTask}> &times;</div>
                 <div>Titre</div>
                 <input type="text" name="TacheChoisie" defaultValue={props.tache.contenuTache} required></input>
             </fieldset>

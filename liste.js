@@ -1,8 +1,9 @@
 import { getList, createItem, deleteItem  } from './api.js';
 import React, { useState, useEffect } from 'react';
 import { BarreTache } from './infoListe.js';
-import { Parametres } from './parametres.js'
-import { LogOut} from './index'
+import { Parametres } from './parametres.js';
+import { LogOut} from './index';
+import { SidebarOn, Close } from './mobile';
 
 
 export function ListeTaches() {
@@ -11,6 +12,7 @@ export function ListeTaches() {
     let [tacheChoisie, setTacheChoisie] = useState();
     let [detailListe, setDetailListe] = useState();
     let [showParam, setShowParam] = useState(false);
+    let [titreMobile, setTitreMobile] = useState("Accueil / Prochaines tâches")
     useEffect(() => {
         async function fetchList() {
             let liste = await getList()
@@ -26,7 +28,16 @@ export function ListeTaches() {
         setShowParam(false);
         setShowTaches(false);
         setDetailListe(null);
+        setTitreMobile("Accueil / Prochaines tâches");
     }
+
+    function Params() {
+        setShowParam(true);
+
+        setTitreMobile("Paramètres");
+    }
+
+  
     /*function handleSuccess() {
         //en cas d'ajout d'une nouvelle liste / taches
 
@@ -35,15 +46,16 @@ export function ListeTaches() {
     return (
         
         <div className="container__accueil">
-            <div className="sidebar">
+            <div className="sidebar left-sidebar">
                 <div className="menu__top">
+                    <div className="close-mobile" onClick={Close}> &times;</div>
                     <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" onClick={Home}><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z" fill="#FF7675"/></svg>
                     <span> mail@utilisateur.com</span>
                 </div> 
                 <h6 className="sidebar_liste"> Mes listes </h6>
                 <TitreListe listes={listes} />
                 <div className="sidebar-bottom">
-                    <div className="param-logout-link" onClick={() => setShowParam(true)}>
+                    <div className="param-logout-link" onClick={Params}>
                         <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M19.14 12.936c.036-.3.06-.612.06-.936 0-.324-.024-.636-.072-.936l2.028-1.584a.496.496 0 00.12-.612l-1.92-3.324a.488.488 0 00-.588-.216l-2.388.96a7.03 7.03 0 00-1.62-.936l-.36-2.544a.479.479 0 00-.48-.408h-3.84a.467.467 0 00-.468.408l-.36 2.544a7.218 7.218 0 00-1.62.936l-2.388-.96a.475.475 0 00-.588.216l-1.92 3.324a.465.465 0 00.12.612l2.028 1.584c-.048.3-.084.624-.084.936 0 .312.024.636.072.936L2.844 14.52a.496.496 0 00-.12.612l1.92 3.324c.12.216.372.288.588.216l2.388-.96a7.03 7.03 0 001.62.936l.36 2.544c.048.24.24.408.48.408h3.84c.24 0 .444-.168.468-.408l.36-2.544a7.219 7.219 0 001.62-.936l2.388.96c.216.084.468 0 .588-.216l1.92-3.324a.465.465 0 00-.12-.612l-2.004-1.584zM12 15.6A3.61 3.61 0 018.4 12c0-1.98 1.62-3.6 3.6-3.6s3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" fill="#FF7675"/></svg>
                         <h6>Paramètres</h6>
@@ -57,6 +69,11 @@ export function ListeTaches() {
             </div>     
                 
             <div className="main">
+                <div className="accueil-mobile">
+                    <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={SidebarOn}>
+                    <path d="M4 15h16v-2H4v2zm0 4h16v-2H4v2zm0-8h16V9H4v2zm0-6v2h16V5H4z" fill="#fff"/></svg>
+                    {titreMobile}
+                </div>
                 {showParam ?
                 <>
                 <h2>Paramètres</h2>
@@ -66,6 +83,7 @@ export function ListeTaches() {
                 (detailListe == null) ? 
                 <>
                 <h2>Prochaines tâches</h2>
+                
                 <InfoTache listes={listes} />
                 </>
                 :
@@ -101,6 +119,14 @@ export function ListeTaches() {
     }
 
     function InfoTache(props) {
+
+        function SideTask(props) {
+
+            showTaches ? setShowTaches(false) : setShowTaches(true);
+            setTacheChoisie(props);
+            
+        }
+
         return (
             <div className="main__taches">
                 {props.listes.map((liste, index) => {
@@ -111,7 +137,7 @@ export function ListeTaches() {
                         <div key={index} className="taches-liste-unique">
                             <input type="checkbox" className={tache.id} onChange={() => Rayer(tache.id)} />
                             <div className="tache-unique" id={tache.id}>
-                            <div className="container-nom-tache"onDoubleClick={showTaches ? () =>setShowTaches(false): () =>setShowTaches(true)} onClick={ () => setTacheChoisie(tache) }>{tache.contenuTache}</div>
+                            <div className="container-nom-tache" onClick={() => SideTask(tache)} >{tache.contenuTache}</div>
 
                             <div className="delete-div" onClick={() => SupprimerTache(tache.id)}><svg width="24" height="24" className="delete-icon" fill="none" 
                             xmlns="http://www.w3.org/2000/svg" >
@@ -131,6 +157,7 @@ export function ListeTaches() {
 
 function FocusListe(props) {
     // onsubmit input ajout tache et onclick le +, rajouter une tache ds la DB, avec données vides si ce n'est le titre
+    setTitreMobile(props.liste.titre);
     return (
         <>
             <div className="header-edition-liste">
