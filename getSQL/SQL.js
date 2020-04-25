@@ -83,3 +83,27 @@ function deleteTache(IDtaches, callback) {
     }
   });
 }
+/* Fonction qui recupere les etapes d'une tache precise à partir d'une "IDtaches" */
+function getEtapeFromTache(IDlistes, callback) {
+  const query = "SELECT * FROM etapes WHERE IDtaches=$1";
+  utils.executeQuery(query, [IDlistes], (err, result) => {
+    if (err) {
+      callback(true, err);
+    } else if (result.rows.length === 0) {
+      callback(true, `Impossible de retrouver les taches de ${IDlistes}`);
+    } else {
+      callback(undefined, result.rows[0]);
+    }
+  });
+}
+/* Fonction qui supprime une etape à partir d'un "IDetape" */
+function deleteEtape(IDtaches, callback) {
+const query = "DELETE FROM etapes WHERE IDetapes=$1";
+utils.executeQuery(query, [IDtaches], (err, result) => {
+  if (err) {
+    callback(true, err);
+  } else {
+    callback(undefined);
+  }
+});
+}
