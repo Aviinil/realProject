@@ -29,12 +29,12 @@ export async function getList() {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(IDutilisateurs)
+    body: JSON.stringify(IDutilisateur)
   })
 
   */
-export async function getList(IDutilisateurs) {
-  let url = getEndpointURL(`/listes/${IDutilisateurs}`)
+export async function getList(IDutilisateur) {
+  let url = getEndpointURL(`/listes/${IDutilisateur}`)
   let response = await fetch(url)
 
   // 👉 Parser la réponse en JSON

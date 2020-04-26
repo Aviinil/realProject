@@ -26,7 +26,7 @@ function create( email, password, callback) {
 
     var keep = encryptedPasswordHash;
     // Sauvegarde de l'utilisateur en base de données
-    const query = "INSERT INTO utilisateurs (IDutilisateurs, email, unsecured_password) VALUES (nextval('SeqIDutilisateurs'), $1, $2) RETURNING *";
+    const query = "INSERT INTO utilisateur (IDutilisateur, email, secured_password) VALUES (nextval('SeqIDutilisateur'), $1, $2) RETURNING *";
     utils.executeQuery(query, [email, encryptedPasswordHash], (err, result) => {
       if (err) {
         callback(true, err);
@@ -47,7 +47,7 @@ function create( email, password, callback) {
 function authenticate( email, password , callback) {
   // Vérification que l'utilisateur existe 
   // Si l'utilisateur existe pas -> Erreur 
-  const query = "SELECT * FROM utilisateurs WHERE email=$1";
+  const query = "SELECT * FROM utilisateur WHERE email=$1";
   utils.executeQuery(query, [email], (err, result) => {
     if (err) {
       callback(true, err);
@@ -59,11 +59,11 @@ function authenticate( email, password , callback) {
       console.log(err)
       const userFound = result.rows[0];
       // Comparaison des mots de passe cryptés
-      bcrypt.compare(password, userFound.unsecured_password, function (err, result) {
+      bcrypt.compare(password, userFound.secured_password, function (err, result) {
         // Si les mots de passe cryptés sont identiques
         if (result == true) {
           // Suppression du mot de passe crypté pour raison de sécurité
-          delete userFound.unsecured_password; 
+          delete userFound.secured_password; 
           callback(false, userFound);
            // Si les mots de passe cryptés sont différent on affiche un message 
         } else {

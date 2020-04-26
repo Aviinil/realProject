@@ -12,7 +12,34 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.get('/listes/:id([0-9]*)', (req, res) => {
-  getSQL.getListesFromUtilisateur(req.params.id, (err, result) => {
+  getSQL.getListeFromUtilisateur(req.params.id, (err, result) => {
+    
+    if (err) {
+      res.status(500).json({ message: err });
+      return;
+    }
+    else {
+      return res.json(result)
+    }
+  })
+  
+})
+
+app.get('/taches/:id([0-9]*)', (req, res) => {
+  getSQL.getTacheFromListe(req.params.id, (err, result) => {
+    
+    if (err) {
+      res.status(500).json({ message: err });
+      return;
+    }
+    else {
+      return res.json(result)
+    }
+  })
+  
+})
+app.get('/etapes/:id([0-9]*)', (req, res) => {
+  getSQL.getEtapeFromTache(req.params.id, (err, result) => {
     
     if (err) {
       res.status(500).json({ message: err });
@@ -68,7 +95,7 @@ app.post('/utilisateurs/signin/:email/:password', (req, res) => {
 
     res.json({
       message: `Utilisateur ${result.email} / ${result.email} sauvegardé avec succès.`,
-      id: result.IDutilisateurs,
+      id: result.IDutilisateur,
       email: result.email
     });
   });
