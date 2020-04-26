@@ -5,12 +5,22 @@ DROP TABLE IF EXISTS utilisateur CASCADE;
 DROP TABLE IF EXISTS liste CASCADE;
 --DROP TABLE tache CASCADE CONSTRAINT;
 DROP TABLE IF EXISTS tache CASCADE;
--- Drop table etape
+--DROP TABLE etape CASCADE CONSTRAINT;
 DROP TABLE IF EXISTS etape CASCADE;
 DROP SEQUENCE IF EXISTS SeqIDutilisateur;
 DROP SEQUENCE IF EXISTS SeqIDliste;
 DROP SEQUENCE IF EXISTS SeqIDtache;
 DROP SEQUENCE IF EXISTS SeqIDetape;
+-- vidage de mes betises d'avant
+DROP TABLE IF EXISTS utilisateurs CASCADE;
+DROP TABLE IF EXISTS listes CASCADE;
+DROP TABLE IF EXISTS taches CASCADE;
+DROP TABLE IF EXISTS etapes CASCADE;
+DROP SEQUENCE IF EXISTS SeqIDutilisateurs;
+DROP SEQUENCE IF EXISTS SeqIDlistes;
+DROP SEQUENCE IF EXISTS SeqIDtaches;
+DROP SEQUENCE IF EXISTS SeqIDetapes;
+
 
 -- METTEZ TOUT AU SINGULIER
 -- >Les IDutilsateur commence par ressemblent à "1XXXXX" 
@@ -23,14 +33,14 @@ CREATE TABLE utilisateur
 (
   IDutilisateur INTEGER,
   email VARCHAR(50),
-  unsecured_password VARCHAR(60)
+  secured_password VARCHAR(60)
 );
 
 CREATE SEQUENCE SeqIDutilisateur START WITH 10000 INCREMENT BY 10;
 ALTER TABLE utilisateur ADD CONSTRAINT PK_IDutilisateur PRIMARY KEY(IDutilisateur);
 
 -- ID: test@gmail.com Pass: password
-INSERT INTO utilisateur(IDutilisateur, email, unsecured_password) VALUES (nextval('SeqIDutilisateur'), 'test@gmail.com', '$2b$10$qQGzUHQlo/Yy7SWVjCaruuR692KRzD1XhuyqXlz6hWejdBl9I7r/a');
+INSERT INTO utilisateur(IDutilisateur, email, secured_password) VALUES (nextval('SeqIDutilisateur'), 'test@gmail.com', '$2b$10$qQGzUHQlo/Yy7SWVjCaruuR692KRzD1XhuyqXlz6hWejdBl9I7r/a');
 
 -- création table liste
 CREATE TABLE liste
