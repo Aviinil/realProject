@@ -5,6 +5,8 @@ DROP TABLE IF EXISTS utilisateurs CASCADE;
 DROP TABLE IF EXISTS listes CASCADE;
 --DROP TABLE taches CASCADE CONSTRAINT;
 DROP TABLE IF EXISTS taches CASCADE;
+-- Drop table etape
+DROP TABLE IF EXISTS etapes CASCADE;
 DROP SEQUENCE IF EXISTS SeqIDutilisateurs;
 DROP SEQUENCE IF EXISTS SeqIDlistes;
 DROP SEQUENCE IF EXISTS SeqIDtaches;
@@ -14,7 +16,6 @@ DROP SEQUENCE IF EXISTS SeqIDtaches;
 CREATE TABLE utilisateurs 
 (
   IDutilisateurs INTEGER,
-  username VARCHAR(20),
   email VARCHAR(50),
   unsecured_password VARCHAR(60)
 );
@@ -23,7 +24,7 @@ CREATE SEQUENCE SeqIDutilisateurs START WITH 10000 INCREMENT BY 10;
 ALTER TABLE utilisateurs ADD CONSTRAINT PK_IDutilisateurs PRIMARY KEY(IDutilisateurs);
 
 -- c'est à partir de là que Oracle SQL et PostgreSQL ne sont pas d'accord
-INSERT INTO utilisateurs(IDutilisateurs, username, email, unsecured_password) VALUES (nextval('SeqIDutilisateurs'),'test', 'test@gmail.com', 'password');
+INSERT INTO utilisateurs(IDutilisateurs, email, unsecured_password) VALUES (nextval('SeqIDutilisateurs'), 'test@gmail.com', '$2b$10$qQGzUHQlo/Yy7SWVjCaruuR692KRzD1XhuyqXlz6hWejdBl9I7r/a');
 
 -- création table listes
 CREATE TABLE listes 

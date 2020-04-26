@@ -1,6 +1,7 @@
+const users = require('./users')
 let express = require('express')
-let lowdb = require('lowdb')
-
+const jwt = require('jsonwebtoken');
+const config = require("./config.js");
 let bodyParser = require('body-parser')
 let cors = require('cors')
 const getSQL = require("./getSQL/SQL"); // pour moi quand je créerai des fonctions -- Jack
@@ -23,6 +24,55 @@ app.get('/listes/:id([0-9]*)', (req, res) => {
   })
   
 })
+
+app.get('/utilisateurs/login/:email/:password', (req, res) => {
+  let mail = req.params.email;
+  let mdp = req.params.password
+  users.authenticate(mail, mdp , (err, result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return;
+    }
+    const userFound = result;
+    console.log(userFound)
+    if (userFound) {
+      const token = jwt.sign(
+        { username: req.body.username }, 
+        config.secret, 
+        { expiresIn: '1h' }
+      );
+      res.json({
+        message: 'Authentication successful!',
+        token: token
+        
+      });
+    } else {
+      res.status(403).json({
+        message: 'Incorrect username or password',
+        token: null
+      });
+    }
+  });
+  
+})
+
+app.post('/utilisateurs/signin/:email/:password', (req, res) => {
+  let mail = req.params.email;
+  let mdp = req.params.password
+
+  users.create(mail, mdp, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return;
+    }
+
+    res.json({
+      message: `Utilisateur ${result.email} / ${result.email} sauvegardé avec succès.`,
+      id: result.IDutilisateurs,
+      email: result.email
+    });
+  });
+});
 /*
 app.post('/posts', (req, res) => {
   console.log(req.body)

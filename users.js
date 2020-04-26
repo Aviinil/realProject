@@ -12,24 +12,26 @@
 const bcrypt = require('bcrypt');
 const express = require("express");
 const session = require("express-session");
-const helpers = require("./helpers/helpers");
 const app = express();
+const utils = require("./bdd/utils");
 
 app.use(express.urlencoded({ extended: true }));
 
 
 /********************************* Fonction création nouveau utilisateur *********************************************/
-function create({ username, password, firstname, lastname, email }, callback) {
+function create( email, password, callback) {
 
   //Cryptage du mot de passe
   bcrypt.hash(password, 10, (err, encryptedPasswordHash) => {
 
     var keep = encryptedPasswordHash;
     // Sauvegarde de l'utilisateur en base de données
-    const query = "INSERT INTO users (username, encrypted_password, firstname, lastname, email) VALUES ($1, $2, $3, $4, $5) RETURNING *";
-    utils.executeQuery(query, [username, encryptedPasswordHash, firstname, lastname, email], (err, result) => {
+    const query = "INSERT INTO utilisateurs (IDutilisateurs, email, unsecured_password) VALUES (nextval('SeqIDutilisateurs'), $1, $2) RETURNING *";
+    utils.executeQuery(query, [email, encryptedPasswordHash], (err, result) => {
       if (err) {
         callback(true, err);
+        console.log(err)
+        console.log(result)
       } else {
         // On passe l'utilisateur crée comme paramètre de la callback
         const createdUser = result.rows[0];
@@ -42,10 +44,11 @@ function create({ username, password, firstname, lastname, email }, callback) {
 }
 
 /********************************* Fonction d'authentification *********************************************/
-function authenticate({ username, password }, callback) {
+function authenticate( email, password , callback) {
   // Vérification que l'utilisateur existe 
   // Si l'utilisateur existe pas -> Erreur 
-  utils.executeQuery("SELECT * FROM users WHERE username=$1", [username], (err, result) => {
+  const query = "SELECT * FROM utilisateurs WHERE email=$1";
+  utils.executeQuery(query, [email], (err, result) => {
     if (err) {
       callback(true, err);
     } 
@@ -53,13 +56,14 @@ function authenticate({ username, password }, callback) {
     // Si l'utilisateur existe on vérifie le mot de passe à la base de données
     else 
     {
+      console.log(err)
       const userFound = result.rows[0];
       // Comparaison des mots de passe cryptés
-      bcrypt.compare(password, userFound.encrypted_password, function (err, result) {
+      bcrypt.compare(password, userFound.unsecured_password, function (err, result) {
         // Si les mots de passe cryptés sont identiques
         if (result == true) {
           // Suppression du mot de passe crypté pour raison de sécurité
-          delete userFound.encrypted_password; 
+          delete userFound.unsecured_password; 
           callback(false, userFound);
            // Si les mots de passe cryptés sont différent on affiche un message 
         } else {

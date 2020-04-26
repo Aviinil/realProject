@@ -43,6 +43,29 @@ export async function getList(IDutilisateurs) {
   // 👉 Renvoyer les données
   return data
 }
+
+export async function authentifier(email, password) {
+  let url = getEndpointURL(`/utilisateurs/login/${email}/${password}`)
+  let response = await fetch(url)
+ 
+  // 👉 Parser la réponse en JSON
+  let data = await response.json();
+
+  // 👉 Renvoyer les données
+  return data
+}
+
+export async function inscrire(email, password) {
+  let url = getEndpointURL(`/utilisateurs/signin/${email}/${password}`)
+  let myInit = { method: 'POST'}
+  let response = await fetch(url, myInit)
+
+  // 👉 Parser la réponse en JSON
+  let data = await response.json();
+
+  // 👉 Renvoyer les données
+  return data
+}
 /*
 export async function getList() {
 
