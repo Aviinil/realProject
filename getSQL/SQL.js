@@ -32,7 +32,8 @@ function getListesFromUtilisateur(IDutilisateurs, callback) {
     } else if (result.rows.length === 0) {
       callback(true, `Impossible de retrouver les listes de ${IDutilisateurs}`);
     } else {
-      callback(undefined, result.rows[0]);
+      callback(undefined, result.rows);
+     
     }
   });
 }

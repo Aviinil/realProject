@@ -1,9 +1,5 @@
-/*
-const getSQL = require("./getSQL/SQL"); // pour moi quand je créerai des fonctions -- Jack
-const express = require("express"); // pour moi quand je créerai des fonctions -- Jack
-const router = express.Router(); // pour moi quand je créerai des fonctions -- Jack
-*/
-const BASE_URL = // URL de la BD
+
+const BASE_URL = 'http://localhost:3000' // URL du serveur API qui fera les appels SQL
 
 // ==================> A MODIFIER POUR L'ADAPTER A DES ITEMS DE LISTE
 
@@ -24,30 +20,37 @@ export async function getList() {
 }*/
 
 // Alors là, c'est purement experimentale comme fonction, hein! :)
+
+
 /*
+
+, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(IDutilisateurs)
+  })
+
+  */
 export async function getList(IDutilisateurs) {
+  let url = getEndpointURL(`/listes/${IDutilisateurs}`)
+  let response = await fetch(url)
 
-  getSQL.getListesFromUtilisateur(IDutilisateurs, (err, result) => {
-    if (err) {
-      res.status(500).json({ message: err });
-      return;
-    }
-    else {
-      response = result;
-    }
-
-    let data = await response.json()
-    return data;
-  });
+  // 👉 Parser la réponse en JSON
+  let data = await response.json()
+  
+  // 👉 Renvoyer les données
+  return data
 }
-*/
+/*
 export async function getList() {
 
   let response = await fetch('http://localhost:3000/listes');
 
   let data = await response.json()
   return data
-}
+}*/
 export async function createItem(item) {
   // 👉 Faire une requête POST sur l'URL http://localhost:3000/posts grâce à
   // fetch

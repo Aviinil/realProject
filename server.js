@@ -1,23 +1,27 @@
 let express = require('express')
 let lowdb = require('lowdb')
-let FileSync = require('lowdb/adapters/FileSync')
+
 let bodyParser = require('body-parser')
 let cors = require('cors')
-let shortid = require('shortid');
-
-let adapter = new FileSync('db.json')
-let db = lowdb(adapter)
-
+const getSQL = require("./getSQL/SQL"); // pour moi quand je créerai des fonctions -- Jack
 let app = express()
 
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-app.get('/listes', (req, res) => {
-  let posts = db.get('listes').value()
-
-  return res.json(posts)
+app.get('/listes/:id([0-9]*)', (req, res) => {
+  getSQL.getListesFromUtilisateur(req.params.id, (err, result) => {
+    
+    if (err) {
+      res.status(500).json({ message: err });
+      return;
+    }
+    else {
+      return res.json(result)
+    }
+  })
+  
 })
 /*
 app.post('/posts', (req, res) => {

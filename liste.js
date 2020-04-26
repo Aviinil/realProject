@@ -15,8 +15,8 @@ export function ListeTaches() {
     let [titreMobile, setTitreMobile] = useState("Accueil / Prochaines tâches")
     useEffect(() => {
         async function fetchList() {
-            let liste = await getList()
-        
+            let liste = await getList(10000);
+            console.log(liste)
             setListes(liste)
         }
     

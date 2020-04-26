@@ -1,9 +1,9 @@
 module.exports = {
 	database: {
-		user: "lrfsdeoj",
-		host: "balarama.db.elephantsql.com",
-		database: "lrfsdeoj",
-		password: "ZfVrm-zcjzU6pJ3y7_QDoUhzWooWo-m0",
+		user: "scforrji",
+		host: "kandula.db.elephantsql.com",
+		database: "scforrji",
+		password: "wGKjbJUGmYOVUIboBY41zPbpvkOx2StL",
 		port: 5432
 	},
 };
