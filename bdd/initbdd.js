@@ -10,6 +10,7 @@ const sql = fs.readFileSync(dbFilePath).toString();
 utils.executeQuery(sql, [], (err, result) => {
   if (err) {
     console.log(result);
+    console.log(err)
   } else {
     console.log("Initialisation de la base de donnée terminé!");
   }

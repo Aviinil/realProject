@@ -1,10 +1,10 @@
 -- vidage table et sequence
 --DROP TABLE utilisateurs CASCADE CONSTRAINT;
-DROP TABLE IF EXISTS utilisateurs;
+DROP TABLE IF EXISTS utilisateurs CASCADE;
 --DROP TABLE listes CASCADE CONSTRAINT;
-DROP TABLE IF EXISTS listes;
+DROP TABLE IF EXISTS listes CASCADE;
 --DROP TABLE taches CASCADE CONSTRAINT;
-DROP TABLE IF EXISTS taches;
+DROP TABLE IF EXISTS taches CASCADE;
 DROP SEQUENCE IF EXISTS SeqIDutilisateurs;
 DROP SEQUENCE IF EXISTS SeqIDlistes;
 DROP SEQUENCE IF EXISTS SeqIDtaches;
@@ -38,8 +38,8 @@ CREATE SEQUENCE SeqIDlistes START WITH 20000 INCREMENT BY 10;
 ALTER TABLE listes ADD CONSTRAINT PK_IDlistes PRIMARY KEY(IDlistes);
 
 -- Ces 2 listes appartiennent à l'utilisateur "test"(numero 10000)
---INSERT INTO listes(IDlistes, titre, content, IDutilisateurs) VALUES (nextval('SeqIDlistes'), 'Coucou', 'something interesting', 10000);
---INSERT INTO listes(IDlistes, titre, content, IDutilisateurs) VALUES (nextval('SeqIDlistes'), 'Yeah', 'something else !', 10000);
+INSERT INTO listes(IDlistes, titre, content, IDutilisateurs) VALUES (nextval('SeqIDlistes'), 'Coucou', 'something interesting', 10000);
+INSERT INTO listes(IDlistes, titre, content, IDutilisateurs) VALUES (nextval('SeqIDlistes'), 'Yeah', 'something else !', 10000);
 
 -- création table taches
 CREATE TABLE taches 
@@ -54,10 +54,10 @@ CREATE SEQUENCE SeqIDtaches START WITH 30000 INCREMENT BY 10;
 ALTER TABLE taches ADD CONSTRAINT PK_IDtaches PRIMARY KEY(IDtaches);
 
 -- Tache appartenant à la liste "coucou"
-INSERT INTO taches(IDtaches, contenuTache, IDlistes) VALUES (SeqIDtaches.NEXTVAL, 'Finir le projet', 20000);
+INSERT INTO taches(IDtaches, contenuTache, IDlistes) VALUES (nextval('SeqIDtaches'), 'Finir le projet', 20000);
 -- Tache appartenant à la liste "Yeah"
-INSERT INTO taches(IDtaches, contenuTache, IDlistes) VALUES (SeqIDtaches.NEXTVAL, 'Bosser le projet', 20010);
-INSERT INTO taches(IDtaches, contenuTache, IDlistes) VALUES (SeqIDtaches.NEXTVAL, 'En chier pour le projet', 20010);
+INSERT INTO taches(IDtaches, contenuTache, IDlistes) VALUES (nextval('SeqIDtaches'), 'Bosser le projet', 20010);
+INSERT INTO taches(IDtaches, contenuTache, IDlistes) VALUES (nextval('SeqIDtaches'), 'En chier pour le projet', 20010);
 
 CREATE TABLE etapes
 (

@@ -1,7 +1,8 @@
+/*
 const getSQL = require("./getSQL/SQL"); // pour moi quand je créerai des fonctions -- Jack
 const express = require("express"); // pour moi quand je créerai des fonctions -- Jack
 const router = express.Router(); // pour moi quand je créerai des fonctions -- Jack
-
+*/
 const BASE_URL = // URL de la BD
 
 // ==================> A MODIFIER POUR L'ADAPTER A DES ITEMS DE LISTE
@@ -23,6 +24,7 @@ export async function getList() {
 }*/
 
 // Alors là, c'est purement experimentale comme fonction, hein! :)
+/*
 export async function getList(IDutilisateurs) {
 
   getSQL.getListesFromUtilisateur(IDutilisateurs, (err, result) => {
@@ -38,8 +40,14 @@ export async function getList(IDutilisateurs) {
     return data;
   });
 }
+*/
+export async function getList() {
 
+  let response = await fetch('http://localhost:3000/listes');
 
+  let data = await response.json()
+  return data
+}
 export async function createItem(item) {
   // 👉 Faire une requête POST sur l'URL http://localhost:3000/posts grâce à
   // fetch
