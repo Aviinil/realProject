@@ -53,6 +53,16 @@ export async function getTaches(IDListe) {
   // 👉 Renvoyer les données
   return data
 }
+export async function getEtapes(IDtache) {
+  let url = getEndpointURL(`/etapees/${IDtachee}`)
+  let response = await fetch(url)
+
+  // 👉 Parser la réponse en JSON
+  let data = await response.json()
+  
+  // 👉 Renvoyer les données
+  return data
+}
 
 export async function authentifier(email, password) {
   let url = getEndpointURL(`/utilisateurs/login/${email}/${password}`)
