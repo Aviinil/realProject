@@ -43,7 +43,7 @@ export function BarreTache(props) {
             <fieldset className="zone__button">
                  
                 <input type="submit" className="Button" value="Enregistrer" ></input>
-                <input type="submit" className="Button" value="Annuler" ></input>
+                <input type="submit" className="Button" value="Annuler" on onClick={CloseTask}></input>
             </fieldset>
         </div>
     )

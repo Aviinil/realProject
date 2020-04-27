@@ -195,16 +195,16 @@ async function InscriptionEnCours() {
     let inputMail = document.querySelector('.input-mail').value;
     let inputMdp = document.querySelector('.input-mdp').value;
     let reponse = await inscrire(inputMail, inputMdp)
-
+    // A faire :
     // si mail est déjà enregistré
+    
     let mail = document.querySelector('.erreur-connexion-mail');
     mail.innerHTML="Cette adresse e-mail est déjà utilisée";
-    //mail envoyé si reussit
+    //mail envoyé si reussi
     let mailE = document.querySelector('.completed');
     mailE.innerHTML="Un mail de confirmation vous a été envoyé";
-    history.pushState(null, null, 'http://localhost:1234')
-
-    // reload ??
-    reload();
+    
+    history.replaceState(null, null, 'http://localhost:1234');
+    window.location.reload();
     
 }

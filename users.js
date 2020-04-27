@@ -56,7 +56,6 @@ function authenticate( email, password , callback) {
     // Si l'utilisateur existe on vérifie le mot de passe à la base de données
     else 
     {
-      console.log(err)
       const userFound = result.rows[0];
       // Comparaison des mots de passe cryptés
       bcrypt.compare(password, userFound.secured_password, function (err, result) {
