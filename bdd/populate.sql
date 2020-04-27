@@ -63,8 +63,9 @@ CREATE TABLE tache
 (
   IDtache INTEGER,
   IDliste INTEGER REFERENCES liste (IDliste) NOT NULL,
-  contenuTache VARCHAR(50)
-  --rajouter un boolean "is_checked" Attention BOOLEAN n'existe que dans PostgreSQL!!
+  contenuTache VARCHAR(50),
+  checked BOOLEAN DEFAULT FALSE,
+  echance TIMESTAMP
 );
 
 CREATE SEQUENCE SeqIDtache START WITH 30000 INCREMENT BY 10;
@@ -80,6 +81,7 @@ CREATE TABLE etape
 (
   IDetape INTEGER,
   IDtache INTEGER REFERENCES tache (IDtache) NOT NULL,
+  checked BOOLEAN DEFAULT FALSE,
   contenuEtape VARCHAR(100)
 );
 
