@@ -74,7 +74,7 @@ function getTacheFromListe(IDliste, callback) {
       } else if (result.rows.length === 0) {
         callback(true, `Impossible de retrouver les taches de ${IDliste}`);
       } else {
-        callback(undefined, result.rows[0]);
+        callback(undefined, result.rows);
       }
     });
 }
@@ -109,7 +109,7 @@ function getEtapeFromTache(IDliste, callback) {
     } else if (result.rows.length === 0) {
       callback(true, `Impossible de retrouver les taches de ${IDliste}`);
     } else {
-      callback(undefined, result.rows[0]);
+      callback(undefined, result.rows);
     }
   });
 }

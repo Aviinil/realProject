@@ -69,8 +69,10 @@ app.get('/utilisateurs/login/:email/:password', (req, res) => {
         { expiresIn: '1h' }
       );
       res.json({
+        Util: userFound,
         message: 'Authentication successful!',
         token: token
+        
         
       });
     } else {

@@ -7,7 +7,7 @@ export function BarreTache(props) {
             <fieldset>
                 <div className="close-mobile close-task-mobile" onClick={CloseTask}> &times;</div>
                 <div>Titre</div>
-                <input type="text" name="TacheChoisie" defaultValue={props.tache.contenuTache} required></input>
+                <input type="text" name="TacheChoisie" defaultValue={props.tache.contenutache} required></input>
             </fieldset>
             <fieldset >
                 <div>Etapes</div>

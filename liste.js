@@ -1,28 +1,42 @@
-import { getList, createItem, deleteItem  } from './api.js';
+import { getList, getTaches, createItem, deleteItem  } from './api.js';
 import React, { useState, useEffect } from 'react';
 import { BarreTache } from './infoListe.js';
 import { Parametres } from './parametres.js';
 import { LogOut} from './index';
 import { SidebarOn, Close } from './mobile';
+import { getIdUser } from './connexion.js';
 
 
 export function ListeTaches() {
+    let user = getIdUser();
     let [showTaches, setShowTaches] = useState(false);
     let [listes, setListes] = useState([]);
     let [tacheChoisie, setTacheChoisie] = useState();
+    let [toutesTaches, setToutesTaches] = useState([])
+    let tachesTab = [];
+    let tab = [];
     let [detailListe, setDetailListe] = useState();
     let [showParam, setShowParam] = useState(false);
     let [titreMobile, setTitreMobile] = useState("Accueil / Prochaines tâches")
     useEffect(() => {
         async function fetchList() {
-            let liste = await getList(10000);
-            console.log(liste)
+            let liste = await getList(user.idutilisateur);
             setListes(liste)
+            for(let i = 0; i < liste.length; ++i){
+                
+                let taches = await getTaches(liste[i].idliste);
+                taches.forEach(tache => {
+                    tachesTab.push(tache)
+                });
+                
+            }
+            setToutesTaches(tachesTab)
+            
         }
-    
+       
         fetchList()
     }, [])
-    
+
     function Home() {
         // retour à l'ecran d'accueil en cliquant sur la petite maison sidebar top
         setShowParam(false);
@@ -50,9 +64,12 @@ export function ListeTaches() {
                 <div className="menu__top">
                     <div className="close-mobile" onClick={Close}> &times;</div>
                     <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" onClick={Home}><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8h5z" fill="#FF7675"/></svg>
-                    <span> mail@utilisateur.com</span>
+                    <span> {user.email}</span>
                 </div> 
-                <h6 className="sidebar_liste"> Mes listes </h6>
+                <div className="mes_listes">
+                    <h6 className="sidebar_liste"> Mes listes </h6>
+                    <div className="ligne"></div>
+                </div>
                 <TitreListe listes={listes} />
                 <div className="sidebar-bottom">
                     <div className="param-logout-link" onClick={Params}>
@@ -84,7 +101,7 @@ export function ListeTaches() {
                 <>
                 <h2>Prochaines tâches</h2>
                 
-                <InfoTache listes={listes} />
+                <InfoTache/>
                 </>
                 :
                 <>
@@ -105,7 +122,7 @@ export function ListeTaches() {
                 {props.listes.map((liste, index) => {
                     
                     return <div key={index} className="titre-liste" onClick={() =>setDetailListe(liste)}> {liste.titre} 
-                    <span className="compteur"> {liste.taches.length}
+                    <span className="compteur"> <NbTache liste={liste} taches ={toutesTaches}/>
                         </span></div>
                 })}
                 {showForm ? <NouvelleListe /> : null}
@@ -118,7 +135,7 @@ export function ListeTaches() {
         )
     }
 
-    function InfoTache(props) {
+    function InfoTache() {
 
         function SideTask(props) {
 
@@ -129,17 +146,15 @@ export function ListeTaches() {
 
         return (
             <div className="main__taches">
-                {props.listes.map((liste, index) => {
-                    
-                    return (
-                    <div key={index} className="taches-liste"> 
-                    {liste.taches.map((tache, index) =>  
-                        <div key={index} className="taches-liste-unique">
-                            <input type="checkbox" className={tache.id} onChange={() => Rayer(tache.id)} />
-                            <div className="tache-unique" id={tache.id}>
-                            <div className="container-nom-tache" onClick={() => SideTask(tache)} >{tache.contenuTache}</div>
 
-                            <div className="delete-div" onClick={() => SupprimerTache(tache.id)}><svg width="24" height="24" className="delete-icon" fill="none" 
+                <div  className="taches-liste"> 
+                    {toutesTaches.map((tache, index) =>  
+                        <div key={index} className="taches-liste-unique">
+                            <input type="checkbox" className={tache.idtache} onChange={() => Rayer(tache.idtache)} />
+                            <div className="tache-unique" id={tache.idtache}>
+                            <div className="container-nom-tache" onClick={() => SideTask(tache)} >{tache.contenutache}</div>
+
+                            <div className="delete-div" onClick={() => SupprimerTache(tache.idtache)}><svg width="24" height="24" className="delete-icon" fill="none" 
                             xmlns="http://www.w3.org/2000/svg" >
                             <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"  />
                             </svg></div>
@@ -148,8 +163,8 @@ export function ListeTaches() {
                         </div>
                     )}
                 
-                    </div>
-                )})}
+                </div>
+                
                <div className="tache-finale"></div> 
             </div>  
         ) 
@@ -157,6 +172,12 @@ export function ListeTaches() {
 
 function FocusListe(props) {
     // onsubmit input ajout tache et onclick le +, rajouter une tache ds la DB, avec données vides si ce n'est le titre
+    let tachesListes = [];
+    toutesTaches.forEach( tache => {
+        if (tache.idliste === props.liste.idliste) {
+            tachesListes.push(tache)
+        }
+    })
     setTitreMobile(props.liste.titre);
     return (
         <>
@@ -169,13 +190,14 @@ function FocusListe(props) {
                         </div>
             </div>
             <div className="taches-liste"> 
-                {props.liste.taches.map((tache, index) =>  
+                {tachesListes.map((tache, index) =>  
                     <div key={index} className="taches-liste-unique">
-                        <input type="checkbox" className={tache.id} onChange={() => Rayer(tache.id)} />
-                        <div className="tache-unique" id={tache.id}>
-                        <div className="container-nom-tache"onDoubleClick={showTaches ? () =>setShowTaches(false): () =>setShowTaches(true)} onClick={ () => setTacheChoisie(tache) }>{tache.contenuTache}</div>
+                        <input type="checkbox" className={tache.idtache} onChange={() => Rayer(tache.idtache)} />
+                        <div className="tache-unique" id={tache.idtache}>
+                        <div className="container-nom-tache"onDoubleClick={showTaches ? () =>setShowTaches(false): () =>setShowTaches(true)} onClick={ () => setTacheChoisie(tache) }>
+                            {tache.contenutache}</div>
 
-                        <div className="delete-div" onClick={() => SupprimerTache(tache.id)}><svg width="24" height="24" className="delete-icon" fill="none" 
+                        <div className="delete-div" onClick={() => SupprimerTache(tache.idtache)}><svg width="24" height="24" className="delete-icon" fill="none" 
                         xmlns="http://www.w3.org/2000/svg" >
                         <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"  />
                         </svg></div>
@@ -230,6 +252,16 @@ function ShowModalSuppr(props) {
       }
 }
 
+function NbTache(props) {
+    let i = 0;
+    props.taches.forEach(tache => {
+        if (tache.idliste == props.liste.idliste){
+            ++i;
+        }
+    })
+    
+    return i;
+}
 
 function NouvelleListe() {
     // call a l'api pour créer une nouvelle liste puis rediriger vers la page d edition de la liste

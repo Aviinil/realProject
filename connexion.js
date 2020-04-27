@@ -3,17 +3,14 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link,
-    Redirect,
-    useHistory,
-    useLocation
+    Link
   } from "react-router-dom";
 import { authentifier, inscrire } from './api';
 import { init } from './index';
 
 const jwt = require('jsonwebtoken');
 
-let validUser ;  
+let validUser, User ;  
 
 export function NonAuth() {
     return (
@@ -157,7 +154,8 @@ async function VerifierIdentifiants() {
     try {
     let decoded = jwt.verify(reponse.token, "bobfoo42")
         validUser = true;
-        console.log(validUser)
+        
+        User = reponse.Util;
         init();
 
     } catch(err) {
@@ -171,8 +169,10 @@ async function VerifierIdentifiants() {
 
 }
 export function userValid() {
-    console.log(validUser)
     return validUser;
+}
+export function getIdUser() {
+    return User;
 }
 function mdpDifferents() {
     let inputMdp = document.querySelector('.input-mdp');
