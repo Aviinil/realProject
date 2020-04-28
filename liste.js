@@ -1,4 +1,4 @@
-import { getList, getTaches, createItem, deleteItem  } from './api.js';
+import { getList, getTaches, createList, createTache, deleteList} from './api.js';
 import React, { useState, useEffect } from 'react';
 import { BarreTache } from './infoListe.js';
 import { Parametres } from './parametres.js';
@@ -14,7 +14,6 @@ export function ListeTaches() {
     let [tacheChoisie, setTacheChoisie] = useState();
     let [toutesTaches, setToutesTaches] = useState([])
     let tachesTab = [];
-    let tab = [];
     let [detailListe, setDetailListe] = useState();
     let [showParam, setShowParam] = useState(false);
     let [titreMobile, setTitreMobile] = useState("Accueil / Prochaines tâches")
@@ -24,9 +23,10 @@ export function ListeTaches() {
             setListes(liste)
             for(let i = 0; i < liste.length; ++i){
                 
-                let taches = await getTaches(liste[i].idliste);
+                let taches = await getTaches(liste[i].idliste);               
                 taches.forEach(tache => {
                     tachesTab.push(tache)
+                    
                 });
                 
             }
@@ -50,12 +50,6 @@ export function ListeTaches() {
 
         setTitreMobile("Paramètres");
     }
-
-  
-    /*function handleSuccess() {
-        //en cas d'ajout d'une nouvelle liste / taches
-
-    }*/
  
     return (
         
@@ -117,6 +111,19 @@ export function ListeTaches() {
 
     function TitreListe(props) {
         let [showForm, setShowForm] = useState(false);
+        
+        function NouvelleListe(props) {
+            return (
+                <div className="container__connexion ajout-liste">
+        
+                    <p>
+                    
+                        <input type="text" name="nouvelleListe" placeholder="Intitulé de la liste" required></input>
+                        <input type="submit" className="Button" value="Ajouter liste" onClick={()=>setShowForm(false), ()=>AjoutListe(props.idutil)} required></input>
+                    </p>
+                </div>
+            )
+        }
         return (
             <div className="titres">
                 {props.listes.map((liste, index) => {
@@ -125,7 +132,7 @@ export function ListeTaches() {
                     <span className="compteur"> <NbTache liste={liste} taches ={toutesTaches}/>
                         </span></div>
                 })}
-                {showForm ? <NouvelleListe /> : null}
+                {showForm ? <NouvelleListe idutil={user.idutilisateur} /> : null}
                 <div className="titre-liste" onClick={() => setShowForm(true)}>
                     <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" >
                     <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#000" /></svg>
@@ -133,15 +140,29 @@ export function ListeTaches() {
                 </div>
             </div>   
         )
+        
     }
+    
+    async function AjoutListe(props) {
+       let titreListe = document.querySelector('input[name="nouvelleListe"]').value;
+        let newListe = {
+            idutil: props,
+            titre: titreListe
+        }
 
+        let reponse = await createList(newListe);
+        setListes(prevListes => [...prevListes, reponse])
+        console.log(reponse)
+       
+        
+        
+    }
     function InfoTache() {
 
         function SideTask(props) {
 
             showTaches ? setShowTaches(false) : setShowTaches(true);
             setTacheChoisie(props);
-            
         }
 
         return (
@@ -212,7 +233,7 @@ function FocusListe(props) {
                         <p>Après avoir été supprimée, une liste ne peut pas être récupérée.
                         Êtes-vous certain(e) de vouloir supprimer la liste "{props.liste.titre}" </p>
                         <div className="delete-buttons">
-                            <div className="suppression-definitive" onClick={fonctionFetchDelete}>
+                            <div className="suppression-definitive" onClick={()=> fonctionFetchDelete(props.liste.idliste)}>
                             <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4h-3.5z" fill="#fff"/>
                             </svg> Supprimer la liste
@@ -229,7 +250,7 @@ function FocusListe(props) {
                 <div className="taches-liste-unique ajout-tache">
                     <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#000"/></svg>
-                    <div> <input type="text" name="ajouter-tache" placeholder="Ajouter une tâche ..." required></input></div>   
+                    <div> <input type="text" name="ajouter-tache" placeholder="Ajouter une tâche ..." onKeyPress={()=>AjoutTache(event, props.liste.idliste)} required></input></div>   
                 </div>
                 <div className="tache-finale"></div>
             </div>
@@ -238,15 +259,38 @@ function FocusListe(props) {
 
 }
    
+async function AjoutTache(e, props) {
+    if (e.keyCode == 13) {
+        let texteTache = document.querySelector('input[name="ajouter-tache"]').value;
+        
+        let tacheAAjouter = {
+            idliste: props,
+            contenutache: texteTache,
+            echance: new Date()
+        }
+        let reponse = await createTache(tacheAAjouter);
+        setToutesTaches(prevTaches => [...prevTaches, reponse])
+        console.log(new Date())
+        
+    }
+    
 }
-function fonctionFetchDelete() {
+
+}
+async function fonctionFetchDelete(props) {
     // api suppression de la liste
+    let idliste = {
+        idliste: props
+    }
+    let reponse = await deleteList(idliste);
+    console.log(reponse)
+
 }
 function ShowModalSuppr(props) {
     
     let modal = document.getElementById("myModal");
     modal.style.display = "block";
-    var close = document.getElementsByClassName("annuler")[0];
+    let close = document.getElementsByClassName("annuler")[0];
     close.onclick = function() {
         modal.style.display = "none";
       }
@@ -263,22 +307,7 @@ function NbTache(props) {
     return i;
 }
 
-function NouvelleListe() {
-    // call a l'api pour créer une nouvelle liste puis rediriger vers la page d edition de la liste
-    return (
-        <div className="container__connexion">
-            
-            <form method="post" action="/d"> 
-                <p>
-                
-                    <input type="text" name="nouvelleListe" placeholder="Intitulé de la liste" required></input>
-                </p>
-            </form>
-        
-            
-        </div>
-    )
-}
+
 
 function Rayer(index) {
     // ajouter l'information dans la DB

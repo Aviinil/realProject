@@ -15,7 +15,7 @@ app.get('/listes/:id([0-9]*)', (req, res) => {
   getSQL.getListeFromUtilisateur(req.params.id, (err, result) => {
     
     if (err) {
-      res.status(500).json({ message: err });
+      res.status(500).json(result);
       return;
     }
     else {
@@ -29,7 +29,7 @@ app.get('/taches/:id([0-9]*)', (req, res) => {
   getSQL.getTacheFromListe(req.params.id, (err, result) => {
     
     if (err) {
-      res.status(500).json({ message: err });
+      res.status(500).json(result);
       return;
     }
     else {
@@ -42,7 +42,7 @@ app.get('/etapes/:id([0-9]*)', (req, res) => {
   getSQL.getEtapeFromTache(req.params.id, (err, result) => {
     
     if (err) {
-      res.status(500).json({ message: err });
+      res.status(500).json(result);
       return;
     }
     else {
@@ -61,12 +61,11 @@ app.get('/utilisateurs/login/:email/:password', (req, res) => {
       return;
     }
     const userFound = result;
-    console.log(userFound)
     if (userFound) {
       const token = jwt.sign(
-        { username: req.body.username }, 
+        { username: userFound.email }, 
         config.secret, 
-        { expiresIn: '1h' }
+        { expiresIn: '12h' }
       );
       res.json({
         Util: userFound,
@@ -102,6 +101,72 @@ app.post('/utilisateurs/signin/:email/:password', (req, res) => {
     });
   });
 });
+
+app.post('/listes/ajout', (req, res) => {
+  
+  getSQL.addListeToUtilisateur(req.body.titre, req.body.idutil, (err,result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return;
+    }
+    res.json({
+      idutil: result.idutilisateur,
+      titre: result.titre,
+      idliste: result.idliste
+    })
+  })
+});
+
+app.post('/taches/ajout', (req, res) => {
+  
+  getSQL.addTacheToListe(req.body.contenutache, req.body.idliste, req.body.echance, (err,result) => {
+    if (err) {
+      res.status(500).json([{ message: result }]);
+      return;
+    }
+
+    res.json({
+      idtache: result.idtache,
+      contenutache: result.contenutache,
+      idliste: result.idliste,
+      checked: result.checked,
+      echeance: result.echance
+    })
+  })
+});
+
+app.post('/etapes/ajout', (req, res) => {
+  
+  getSQL.addEtapeToTache(req.body.contenuetape, req.body.idtache, (err,result) => {
+    if (err) {
+      res.status(500).json([{ message: result }]);
+      return;
+    }
+
+    res.json({
+      idtache: result.idtache,
+      contenuetape: result.contenuetape,
+      idetape: result.idetape,
+      checked: result.checked
+    })
+  })
+});
+app.delete('/listes', (req, res) => {
+  
+  
+  getSQL.deleteListe(req.body.idliste, (err, result) => {
+    if (err) {
+      console.log("test1")
+      res.status(500).json({ message: result });
+      return;
+    }
+
+    res.json({
+      message: result
+    })
+  })
+});
+
 /*
 app.post('/posts', (req, res) => {
   console.log(req.body)

@@ -1,7 +1,21 @@
 import { CloseTask} from './mobile'
+import { getEtapes, createEtape} from './api'
+import { useState, useEffect } from 'react';
 
 export function BarreTache(props) {
-      
+
+    let [etapesTache, setEtapesTache] = useState([])
+    useEffect(() => {
+        async function fetchEtapes(props) {
+            let etapes = await getEtapes(props.tache.idtache);
+            setEtapesTache(etapes)
+            
+        }
+       
+        fetchEtapes(props)
+    }, [])
+
+    console.log(props.tache)
     return (
         <div className="sidebar right-sidebar">
             <fieldset>
@@ -11,22 +25,28 @@ export function BarreTache(props) {
             </fieldset>
             <fieldset >
                 <div>Etapes</div>
-                <div className="etapes" >
-                    <div className="tache-etapes">
-                        <input type="checkbox"  />
-                        <input type="text" className="input-etapes" name="etape" defaultValue="En attente" required></input>
-                    </div >
-                    <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4.667 7.333v1.334h6.666V7.333H4.667zm3.333-6A6.67 6.67 0 001.333 8 6.67 6.67 0 008 14.667 6.67 6.67 0 0014.667 8 6.669 6.669 0 008 1.333zm0 12A5.34 5.34 0 012.667 8 5.34 5.34 0 018 2.667 5.34 5.34 0 0113.333 8 5.34 5.34 0 018 13.333z" fill="#D63031"/></svg>
-                </div>
-                <div className="etapes" >
+                
+
+                    {etapesTache.map((etape,index) => 
+                        <div key={index} className="etapes" >
+                            <div className="tache-etapes">
+                                <input type="checkbox"  checked={etape.checked ? true:false} onChange={()=>checkEtape(etape.idetape)} />
+                                <input type="text" className="input-etapes" name="etape" defaultValue={etape.contenuetape} required></input>
+                            </div >
+                            <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M4.667 7.333v1.334h6.666V7.333H4.667zm3.333-6A6.67 6.67 0 001.333 8 6.67 6.67 0 008 14.667 6.67 6.67 0 0014.667 8 6.669 6.669 0 008 1.333zm0 12A5.34 5.34 0 012.667 8 5.34 5.34 0 018 2.667 5.34 5.34 0 0113.333 8 5.34 5.34 0 018 13.333z" fill="#D63031"/></svg>
+                
+                        </div>
+                    )}
+                    
+                <div className="etapes ajout-etape" >
                     <div className="tache-etapes">  
                         <input type="checkbox"  />  
-                        <input type="text" className="input-etapes" name="etape" defaultValue="En attente" required></input>
+                        <input type="text" className="input-etapes" name="ajout-etape" placeholder="Nouvelle étape" onKeyPress={()=> AjoutEtape(event, props.tache.idtache)} ></input>
                     </div>
-                    <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4.667 7.333v1.334h6.666V7.333H4.667zm3.333-6A6.67 6.67 0 001.333 8 6.67 6.67 0 008 14.667 6.67 6.67 0 0014.667 8 6.669 6.669 0 008 1.333zm0 12A5.34 5.34 0 012.667 8 5.34 5.34 0 018 2.667 5.34 5.34 0 0113.333 8 5.34 5.34 0 018 13.333z" fill="#D63031"/></svg>
-                </div>
+                    <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#000"/></svg>
+                    </div>
             </fieldset>
             <fieldset >
                 <div>Echéance</div>  
@@ -47,4 +67,25 @@ export function BarreTache(props) {
             </fieldset>
         </div>
     )
+    async function AjoutEtape(e, props) {
+        if (e.keyCode == 13) {
+            let texteEtape = document.querySelector('input[name="ajout-etape"]');
+            
+            let etapeAAjouter = {
+                idtache: props,
+                contenuetape: texteEtape.value
+            }
+            let reponse = await createEtape(etapeAAjouter);
+            setEtapesTache(prevEtapes => [...prevEtapes, reponse])
+            texteEtape.value="";
+            
+        }
+        
+    }
 }   
+
+
+function checkEtape(idEtape) {
+    // a gérer quand on check les étapes
+}
+

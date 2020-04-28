@@ -48,14 +48,14 @@ function Connexion() {
                             <label htmlFor="email"> Adresse e-mail </label>
                             <br/>
                             <input type="email" name="email" className ="input-mail" placeholder="mail@provider.com"
-                             required onChange={VerifierMail}></input>
+                             required onChange={VerifierMail} ></input>
                             <span className="erreur-connexion erreur-connexion-mail"></span>
                         </p>
                         <p>
                             <label htmlFor="mdp"> Mot de passe </label>
                             <br/>
                             <input type="password" name="password" className ="input-mdp" placeholder="password" 
-                            required onChange={VerifierMdp}></input>
+                            required onChange={VerifierMdp} onKeyPress={()=>VerifierIdentifiantsE(event)} ></input>
                             <span className="erreur-connexion erreur-connexion-mdp"></span>
                         </p>
                         <p>
@@ -100,7 +100,7 @@ function Inscription() {
                             <label htmlFor="mdpbis"> Répéter le mot de passe </label>
                             <br/>
                             <input type="password" name="passwordRepeat" className ="input-repmdp" placeholder="password" 
-                            required onChange={mdpDifferents}></input>
+                            required onChange={mdpDifferents} onKeyPress={() => InscriptionEnCoursE(event)}></input>
                             <span className="erreur-connexion erreur-connexion-repmdp"></span>
                         </p>
                         <p>
@@ -116,7 +116,7 @@ function Inscription() {
 }
 
 function MdpOublie() {
-    return <div> VA FALLOIR CONSTRUIRE CA </div>
+    return <div> En construction </div>
 
 }
 
@@ -154,7 +154,6 @@ async function VerifierIdentifiants() {
     try {
     let decoded = jwt.verify(reponse.token, "bobfoo42")
         validUser = true;
-        
         User = reponse.Util;
         init();
 
@@ -163,10 +162,33 @@ async function VerifierIdentifiants() {
         console.log(err)
         init();
     }
-   
+}
 
-    
+async function VerifierIdentifiantsE(e) {
+    //malheureusement en double, je ne voyais pas trop comment faire autrement que de refaire une fonction pr ENTREE
+    if (e.keyCode == 13) {
+        let inputMail = document.querySelector('.input-mail').value;
+        let inputMdp = document.querySelector('.input-mdp').value;
+        let reponse = await authentifier(inputMail, inputMdp)
 
+        //si identifiants non reconnus
+        if (reponse.token === undefined) {
+            let spanWrongId = document.querySelector('.erreur-connexion-mdp');
+            spanWrongId.innerHTML = "Identifiants incorrects";
+            spanWrongId.style.textAlign = "center";
+        }
+        try {
+        let decoded = jwt.verify(reponse.token, "bobfoo42")
+            validUser = true;
+            User = reponse.Util;
+            init();
+
+        } catch(err) {
+            validUser = false;
+            console.log(err)
+            init();
+        }
+    }
 }
 export function userValid() {
     return validUser;
@@ -208,3 +230,22 @@ async function InscriptionEnCours() {
     window.location.reload();
     
 }
+async function InscriptionEnCoursE(e) {
+    if (e.keyCode == 13) {
+        let inputMail = document.querySelector('.input-mail').value;
+        let inputMdp = document.querySelector('.input-mdp').value;
+        let reponse = await inscrire(inputMail, inputMdp)
+        // A faire :
+        // si mail est déjà enregistré
+        /*
+        let mail = document.querySelector('.erreur-connexion-mail');
+        mail.innerHTML="Cette adresse e-mail est déjà utilisée";
+        //mail envoyé si reussi
+        let mailE = document.querySelector('.completed');
+        mailE.innerHTML="Un mail de confirmation vous a été envoyé";
+        */
+        history.replaceState(null, null, 'http://localhost:1234');
+        window.location.reload();
+    }
+}
+

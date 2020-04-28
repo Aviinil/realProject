@@ -118,10 +118,10 @@ h6 {
 .ligne {
   
   flex-basis: 60% ;
-  height: 1px;
-  background-color: grey;
+  height: 0.5px;
+  background-color: #ccc;
   width: auto;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .titres {
@@ -291,6 +291,10 @@ margin-top: 8%;
 
 .etapes path {
   fill: crimson;
+}
+.ajout-etape path {
+  fill: black;
+  cursor: pointer;
 }
 fieldset textarea {
   margin-top: 10px;

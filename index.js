@@ -8,12 +8,12 @@ import {userValid} from './connexion'
 let appElement = document.querySelector('#app');
 export function init() {
     if(!userValid()) {
-    //SI NON AUTHENTIFIE
-    ReactDOM.render(<NonAuth />, appElement);
+        //SI NON AUTHENTIFIE
+        ReactDOM.render(<NonAuth />, appElement);
     }
     else {
-    //SI AUTHENTIFIE
-    ReactDOM.render(<ListeTaches />, appElement);
+        //SI AUTHENTIFIE
+        ReactDOM.render(<ListeTaches />, appElement);
     }
 
 }

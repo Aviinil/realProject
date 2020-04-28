@@ -9,16 +9,16 @@ module.exports = {
     addTacheToListe,
     getTacheFromListe,
     deleteTache,
-    addEtapeToListe,
+    addEtapeToTache,
     getEtapeFromTache,
     deleteEtape
   };
 
 
 /* Fonction qui créer une liste pour un utilisateur precis à partir d'un "IDutilisateur" */
-function addListeToUtilisateur(IDliste, titre, content, IDutilisateur, callback) {
-  const query = "INSERT INTO liste(IDliste, titre, content, IDutilisateur) VALUES ($1, $2, $3, $4);";
-  utils.executeQuery(query, [IDliste, titre, content, IDutilisateur], (err, result) => {
+function addListeToUtilisateur( titre, IDutilisateur, callback) {
+  const query = "INSERT INTO liste(IDliste, titre, IDutilisateur) VALUES (nextval('SeqIDliste'), $1, $2) RETURNING *";
+  utils.executeQuery(query, [titre, IDutilisateur], (err, result) => {
     if (err) {
       callback(true, err);
     } else if (result.rows.length === 0) {
@@ -35,7 +35,7 @@ function getListeFromUtilisateur(IDutilisateur, callback) {
     if (err) {
       callback(true, err);
     } else if (result.rows.length === 0) {
-      callback(true, `Impossible de retrouver les liste de ${IDutilisateur}`);
+      callback(true, []);
     } else {
       callback(undefined, result.rows);
      
@@ -44,22 +44,26 @@ function getListeFromUtilisateur(IDutilisateur, callback) {
 }
 /* Fonction qui supprime une liste à partir d'un "IDliste" */
 function deleteListe(IDliste, callback) {
+  console.log("mega test")
+  console.log(IDliste)
   const query = "DELETE FROM liste WHERE IDliste=$1";
   utils.executeQuery(query, [IDliste], (err, result) => {
     if (err) {
+      console.log(err)
+      console.log(result)
       callback(true, err);
     } else {
-      callback(undefined);
+      callback(undefined, "Suppression de liste réussie");
     }
   });
 }
 
 /* Fonction qui ajoute une tache dans une liste precise à partir d'une "IDliste" */
-function addTacheToListe({ IDtache, contenuTache, IDliste }, callback) {
-  const query = "INSERT INTO tache (IDtache, contenuTache, IDliste) VALUES ($1, $2, $3)";
-  utils.executeQuery(query, [IDtache, contenuTache, IDliste], (err, result) => {
+function addTacheToListe( contenuTache, IDliste, echance , callback) {
+  const query = "INSERT INTO tache (IDtache, contenuTache, IDliste, echance) VALUES (nextval('SeqIDtache'), $1, $2, $3) RETURNING *";
+  utils.executeQuery(query, [contenuTache, IDliste, echance], (err, result) => {
     if (err) {
-      callback(true, err);
+      callback(true, result);
     } else {
       callback(undefined, result.rows[0]);
     }
@@ -72,7 +76,7 @@ function getTacheFromListe(IDliste, callback) {
       if (err) {
         callback(true, err);
       } else if (result.rows.length === 0) {
-        callback(true, `Impossible de retrouver les taches de ${IDliste}`);
+        callback(true, []);
       } else {
         callback(undefined, result.rows);
       }
@@ -90,9 +94,9 @@ function deleteTache(IDtache, callback) {
   });
 }
 /* Fonction qui ajoute une etape dans une tache precise à partir d'une "IDtache" */
-function addEtapeToListe({ IDetape, contenuEtape, IDtache }, callback) {
-  const query = "INSERT INTO etape (IDetape, contenuEtape, IDtache) VALUES ($1, $2, $3)";
-  utils.executeQuery(query, [IDetape, contenuEtape, IDtache], (err, result) => {
+function addEtapeToTache(contenuEtape, IDtache , callback) {
+  const query = "INSERT INTO etape (IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), $1, $2) RETURNING *";
+  utils.executeQuery(query, [contenuEtape, IDtache], (err, result) => {
     if (err) {
       callback(true, err);
     } else {
@@ -101,13 +105,13 @@ function addEtapeToListe({ IDetape, contenuEtape, IDtache }, callback) {
   });
 }
 /* Fonction qui recupere les etapes d'une tache precise à partir d'une "IDtache" */
-function getEtapeFromTache(IDliste, callback) {
+function getEtapeFromTache(IDtache, callback) {
   const query = "SELECT * FROM etape WHERE IDtache=$1";
-  utils.executeQuery(query, [IDliste], (err, result) => {
+  utils.executeQuery(query, [IDtache], (err, result) => {
     if (err) {
       callback(true, err);
     } else if (result.rows.length === 0) {
-      callback(true, `Impossible de retrouver les taches de ${IDliste}`);
+      callback(undefined, []);
     } else {
       callback(undefined, result.rows);
     }

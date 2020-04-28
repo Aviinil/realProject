@@ -46,23 +46,23 @@ INSERT INTO utilisateur(IDutilisateur, email, secured_password) VALUES (nextval(
 CREATE TABLE liste
 (
   IDliste INTEGER,
-  IDutilisateur INTEGER REFERENCES utilisateur (IDutilisateur) NOT NULL,
-  titre VARCHAR(20),
-  content VARCHAR(50)
+  IDutilisateur INTEGER REFERENCES utilisateur (IDutilisateur) NOT NULL ,
+  titre VARCHAR(20)
+ 
 );
 
 CREATE SEQUENCE SeqIDliste START WITH 20000 INCREMENT BY 10;
 ALTER TABLE liste ADD CONSTRAINT PK_IDliste PRIMARY KEY(IDliste);
 
 -- Ces 2 listes appartiennent à l'utilisateur "test"(numero 10000)
-INSERT INTO liste(IDliste, titre, content, IDutilisateur) VALUES (nextval('SeqIDliste'), 'Coucou', 'something interesting', 10000);
-INSERT INTO liste(IDliste, titre, content, IDutilisateur) VALUES (nextval('SeqIDliste'), 'Yeah', 'something else !', 10000);
+INSERT INTO liste(IDliste, titre, IDutilisateur) VALUES (nextval('SeqIDliste'), 'Coucou',  10000);
+INSERT INTO liste(IDliste, titre, IDutilisateur) VALUES (nextval('SeqIDliste'), 'Yeah',  10000);
 
 -- création table tache
 CREATE TABLE tache 
 (
   IDtache INTEGER,
-  IDliste INTEGER REFERENCES liste (IDliste) NOT NULL,
+  IDliste INTEGER REFERENCES liste (IDliste) ON DELETE CASCADE NOT NULL,
   contenuTache VARCHAR(50),
   checked BOOLEAN DEFAULT FALSE,
   echance TIMESTAMP
@@ -80,7 +80,7 @@ INSERT INTO tache(IDtache, contenuTache, IDliste) VALUES (nextval('SeqIDtache'),
 CREATE TABLE etape
 (
   IDetape INTEGER,
-  IDtache INTEGER REFERENCES tache (IDtache) NOT NULL,
+  IDtache INTEGER REFERENCES tache (IDtache) ON DELETE CASCADE NOT NULL,
   checked BOOLEAN DEFAULT FALSE,
   contenuEtape VARCHAR(100)
 );
