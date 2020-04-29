@@ -11,7 +11,10 @@ module.exports = {
     deleteTache,
     addEtapeToTache,
     getEtapeFromTache,
-    deleteEtape
+    deleteEtape,
+    checkEtape,
+    checkTache,
+    dateTache
   };
 
 
@@ -44,10 +47,18 @@ function getListeFromUtilisateur(IDutilisateur, callback) {
 }
 /* Fonction qui supprime une liste à partir d'un "IDliste" */
 function deleteListe(IDliste, callback) {
-  console.log("mega test")
-  console.log(IDliste)
-  const query = "DELETE FROM liste WHERE IDliste=$1";
-  utils.executeQuery(query, [IDliste], (err, result) => {
+  //suppression des taches liées en premier
+  const query1 = "DELETE FROM tache WHERE IDliste=$1 ";
+  utils.executeQuery(query1, [IDliste], (err, result) => {
+    if (err) {
+      console.log(err)
+      console.log(result)
+      callback(true, err);
+    }
+  });
+
+  const query2 = "DELETE FROM liste WHERE IDliste=$1 ";
+  utils.executeQuery(query2, [IDliste], (err, result) => {
     if (err) {
       console.log(err)
       console.log(result)
@@ -86,12 +97,22 @@ function getTacheFromListe(IDliste, callback) {
 }
 /* Fonction qui supprime une liste à partir d'un "IDliste" */
 function deleteTache(IDtache, callback) {
-  const query = "DELETE FROM tache WHERE IDtache=$1";
-  utils.executeQuery(query, [IDtache], (err, result) => {
+  const query1 = "DELETE FROM etape WHERE IDtache=$1 ";
+  utils.executeQuery(query1, [IDtache], (err, result) => {
     if (err) {
+      console.log(err)
+      console.log(result)
+      callback(true, err);
+    }
+  });
+  const query2 = "DELETE FROM tache WHERE IDtache=$1";
+  utils.executeQuery(query2, [IDtache], (err, result) => {
+    if (err) {
+      console.log(err)
+      console.log(result)
       callback(true, err);
     } else {
-      callback(undefined);
+      callback(undefined, "Suppression de tache réussie");
     }
   });
 }
@@ -106,6 +127,29 @@ function addEtapeToTache(contenuEtape, IDtache , callback) {
     }
   });
 }
+// fonction pour cocher une checkbox
+function checkTache(idtache, checked, callback) {
+  const query = "UPDATE tache SET checked=$1 WHERE IDtache=$2";
+  utils.executeQuery(query, [checked, idtache], (err, result) => {
+    if (err) {
+      callback(true, err);
+    } else {
+      callback(undefined, "tache cochée");
+    }
+  });
+}
+
+function dateTache(idtache, echeance, callback) {
+  const query = "UPDATE tache SET echeance=$1 WHERE IDtache=$2";
+  utils.executeQuery(query, [echeance, idtache], (err, result) => {
+    if (err) {
+      callback(true, err);
+    } else {
+      callback(undefined, "date changée");
+    }
+  });
+}
+
 /* Fonction qui recupere les etapes d'une tache precise à partir d'une "IDtache" */
 function getEtapeFromTache(IDtache, callback) {
   const query = "SELECT * FROM etape WHERE IDtache=$1";
@@ -120,13 +164,24 @@ function getEtapeFromTache(IDtache, callback) {
   });
 }
 /* Fonction qui supprime une etape à partir d'un "IDetape" */
-function deleteEtape(IDtache, callback) {
+function deleteEtape(IDetape, callback) {
 const query = "DELETE FROM etape WHERE IDetape=$1";
-utils.executeQuery(query, [IDtache], (err, result) => {
-  if (err) {
-    callback(true, err);
-  } else {
-    callback(undefined);
-  }
-});
+  utils.executeQuery(query, [IDetape], (err, result) => {
+    if (err) {
+      callback(true, err);
+    } else {
+      callback(undefined, "Suppression de l'étape réussie");
+    }
+  });
+}
+// fonction pour cocher une checkbox
+function checkEtape(idetape, checked, callback) {
+  const query = "UPDATE etape SET checked=$1 WHERE IDetape=$2";
+  utils.executeQuery(query, [checked, idetape], (err, result) => {
+    if (err) {
+      callback(true, err);
+    } else {
+      callback(undefined, "etape cochée");
+    }
+  });
 }

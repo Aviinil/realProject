@@ -141,44 +141,102 @@ export async function deleteList(idlist) {
   return data
   
 }
-/*
-export async function getList() {
 
-  let response = await fetch('http://localhost:3000/listes');
-
-  let data = await response.json()
-  return data
-}*/
-export async function createItem(item) {
-  // 👉 Faire une requête POST sur l'URL http://localhost:3000/posts grâce à
-  // fetch
-  // (cf https://slides.com/drazik/programmation-web-client-riche-la-programmation-asynchrone-en-js#/23)
-  //let url = getEndpointURL('/posts')
-  let response = await fetch('http://localhost:3000/listes', {
-    method: 'POST',
+export async function deleteTache(idtache) {
+  let url = getEndpointURL('/taches')
+  let response = await fetch(url, {
+    method: 'DELETE',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(item)
+    body: JSON.stringify(idtache)
   })
 
-  // 👉 Parser la réponse en JSON
   let data = await response.json()
 
   if (response.status >= 300) {
     throw new Error(data.message)
   }
-  
-  // 👉 Renvoyer les données
   return data
+  
 }
 
-export async function deleteItem(item) {
-  // 👉 Faire une requête DELETE sur l'URL
-  // http://localhost:3000/posts/{id du post} grâce à fetch
-  // (cf https://slides.com/drazik/programmation-web-client-riche-la-programmation-asynchrone-en-js#/25)
-  let url = getEndpointURL(`/posts/${item.id}`)
-  await fetch(url, {
+export async function deleteEtape(idetape) {
+  let url = getEndpointURL('/etapes')
+
+  let response = await fetch(url, {
     method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(idetape)
   })
+ 
+  let data = await response.json()
+
+  if (response.status >= 300) {
+    throw new Error(data.message)
+  }
+  return data
+  
+}
+
+export async function updateEtape(etape) {
+  let url = getEndpointURL('/etapes')
+
+  let response = await fetch(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(etape)
+  })
+ 
+  let data = await response.json()
+
+  if (response.status >= 300) {
+    throw new Error(data.message)
+  }
+  return data
+  
+}
+
+export async function updateTache(tache) {
+  let url = getEndpointURL('/taches')
+
+  let response = await fetch(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(tache)
+  })
+ 
+  let data = await response.json()
+
+  if (response.status >= 300) {
+    throw new Error(data.message)
+  }
+  return data
+  
+}
+
+export async function changerDateTache(tache) {
+
+  let url = getEndpointURL('/taches/date')
+
+  let response = await fetch(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(tache)
+  })
+ 
+  let data = await response.json()
+
+  if (response.status >= 300) {
+    throw new Error(data.message)
+  }
+  return data
 }

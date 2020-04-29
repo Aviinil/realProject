@@ -132,7 +132,7 @@ app.post('/listes/ajout', (req, res) => {
 
 app.post('/taches/ajout', (req, res) => {
   
-  getSQL.addTacheToListe(req.body.contenutache, req.body.note, req.body.idliste, req.body.echeance, (err,result) => {
+  getSQL.addTacheToListe(req.body.contenutache, req.body.idliste, req.body.echeance, (err,result) => {
     if (err) {
       res.status(500).json([{ message: result }]);
       return;
@@ -170,7 +170,7 @@ app.delete('/listes', (req, res) => {
   
   getSQL.deleteListe(req.body.idliste, (err, result) => {
     if (err) {
-      console.log("test1")
+     
       res.status(500).json({ message: result });
       return;
     }
@@ -181,99 +181,76 @@ app.delete('/listes', (req, res) => {
   })
 });
 
-/*
-app.post('/posts', (req, res) => {
-  console.log(req.body)
-  if (!req.body.content || !req.body.author) {
-    return res.status(400).json({
-      message: 'content and author are required'
+app.delete('/taches', (req, res) => {
+  
+  getSQL.deleteTache(req.body.idtache, (err, result) => {
+    if (err) {
+
+      res.status(500).json({ message: result });
+      return;
+    }
+
+    res.json({
+      message: result
     })
-  }
+  })
+});
 
-  let newPost = {
-    id: shortid.generate(),
-    content: req.body.content,
-    author: req.body.author,
-    date: new Date().toISOString(),
-    comments: []
-  }
+app.delete('/etapes', (req, res) => {
+  
+  getSQL.deleteEtape(req.body.idetape, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return;
+    }
 
-  db.get('posts').push(newPost).write()
-
-  return res.status(201).json(newPost)
-})
-
-app.get('/posts/:id', (req, res) => {
-  let post = db.get('posts').find({ id: req.params.id }).value()
-
-  if (!post) {
-    return res.status(404).send()
-  }
-
-  return res.json(post)
-})
-
-app.delete('/posts/:id', (req, res) => {
-  db.get('posts').remove({ id: req.params.id }).write()
-
-  return res.status(204).send()
-})
-
-app.get('/posts/:id/comments', (req, res) => {
-  let post = db.get('posts').find({ id: req.params.id }).value()
-
-  if (!post) {
-    return res.status(404).send()
-  }
-
-  return res.json(post.comments)
-})
-
-app.post('/posts/:id/comments', (req, res) => {
-  if (!req.body.author || ! req.body.content) {
-    return res.status(400).json({
-      message: 'author and content are required'
+    res.json({
+      message: result
     })
-  }
+  })
+});
+app.patch('/etapes', (req, res) => {
+  
+  getSQL.checkEtape(req.body.idetape, req.body.checked, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return;
+    }
 
-  let post = db.get('posts').find({ id: req.params.id }).value()
+    res.json({
+      message: result
+    })
+  })
+});
 
-  if (!post) {
-    return res.status(404).send()
-  }
+app.patch('/taches', (req, res) => {
+  
+  getSQL.checkTache(req.body.idtache, req.body.checked, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return;
+    }
 
-  let newComment = {
-    id: shortid.generate(),
-    author: req.body.author,
-    content: req.body.content
-  }
+    res.json({
+      message: result
+    })
+  })
+});
 
-  let comments = [...post.comments, newComment]
+app.patch('/taches/date', (req, res) => {
+  
+  getSQL.dateTache(req.body.idtache, req.body.echeance, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: result });
+      return;
+    }
 
-  db.get('posts').find({ id: req.params.id }).assign({ comments }).write()
+    res.json({
+      message: result
+    })
+  })
+});
 
-  return res.json(newComment)
-})
-
-app.delete('/posts/:idPost/comments/:idComment', (req, res) => {
-  let post = db.get('posts').find({ id: req.params.idPost }).value()
-
-  if (!post) {
-    return res.status(404).send()
-  }
-
-  let comments = post.comments.filter(
-    comment => comment.id !== req.params.idComment
-  )
-
-  db.get('posts')
-    .find({ id: req.params.idPost })
-    .assign({ comments })
-    .write()
-
-  return res.status(204).send()
-})
-*/
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000')
 })

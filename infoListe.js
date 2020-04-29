@@ -1,5 +1,5 @@
 import { CloseTask} from './mobile'
-import { getEtapes, createEtape} from './api'
+import { getEtapes, createEtape, deleteEtape, updateEtape, changerDateTache } from './api'
 import { useState, useEffect } from 'react';
 
 export function BarreTache(props) {
@@ -14,8 +14,13 @@ export function BarreTache(props) {
        
         fetchEtapes(props)
     }, [])
-
-    console.log(props.tache)
+    
+    //pas top mais pour passer du format dd/mm/yyy à yyy-mm-dd
+    let jourTache = props.tache.echeance.split('/')[0];
+    let moisTache =props.tache.echeance.split('/')[1];
+    let anneeTache =props.tache.echeance.split('/')[2]
+    let dateTache = `${anneeTache}-${moisTache}-${jourTache}`
+    
     return (
         <div className="sidebar right-sidebar">
             <fieldset>
@@ -30,12 +35,13 @@ export function BarreTache(props) {
                     {etapesTache.map((etape,index) => 
                         <div key={index} className="etapes" >
                             <div className="tache-etapes">
-                                <input type="checkbox" defaultChecked={etape.checked ? true:false} onChange={()=>checkEtape(etape.idetape)} />
-                                <input type="text" className="input-etapes" name="etape" defaultValue={etape.contenuetape} required></input>
+                                <input type="checkbox" id={etape.idetape} defaultChecked={etape.checked ? true:false} onChange={()=>checkEtape(etape.idetape)} />
+                                <input type="text" className="input-etapes" name="etape" readOnly value={etape.contenuetape} required></input>
                             </div >
-                            <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            
+                            <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={()=> FonctionDeleteEtape(etape)}>
                             <path d="M4.667 7.333v1.334h6.666V7.333H4.667zm3.333-6A6.67 6.67 0 001.333 8 6.67 6.67 0 008 14.667 6.67 6.67 0 0014.667 8 6.669 6.669 0 008 1.333zm0 12A5.34 5.34 0 012.667 8 5.34 5.34 0 018 2.667 5.34 5.34 0 0113.333 8 5.34 5.34 0 018 13.333z" fill="#D63031"/></svg>
-                
+                            
                         </div>
                     )}
                     
@@ -51,7 +57,7 @@ export function BarreTache(props) {
             <fieldset >
                 <div>Echéance</div>  
                 <div className="calendar">
-                    <input type="date" name="date"  required></input>
+                    <input type="date" name="date" defaultValue={dateTache} onChange={()=> dateInput(props.tache.idtache)}required></input>
                     <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M13.333 2h-.666V.667h-1.334V2H4.667V.667H3.333V2h-.666c-.734 0-1.334.6-1.334 1.333V14c0 .733.6 1.333 1.334 1.333h10.666c.734 0 1.334-.6 1.334-1.333V3.333c0-.733-.6-1.333-1.334-1.333zm0 12H2.667V5.333h10.666V14z"/></svg>
                 </div>
@@ -62,8 +68,8 @@ export function BarreTache(props) {
             </fieldset>
             <fieldset className="zone__button">
                  
-                <input type="submit" className="Button" value="Enregistrer" ></input>
-                <input type="submit" className="Button" value="Annuler" on onClick={CloseTask}></input>
+                <input type="submit" className="Button" value="Enregistrer" onClick={CloseTask} ></input>
+                <input type="submit" className="Button" value="Annuler" onClick={CloseTask}></input>
             </fieldset>
         </div>
     )
@@ -82,10 +88,47 @@ export function BarreTache(props) {
         }
         
     }
+
+    async function FonctionDeleteEtape(props) {
+ 
+        let idetape = {
+            idetape: props.idetape
+        }
+        let reponse = await deleteEtape(idetape);
+        console.log(reponse)
+        let etapes = await getEtapes(props.idtache);
+        setEtapesTache(etapes)
+    }
+    async function dateInput(props) {
+        //update la date
+        let date = document.querySelector('input[name="date"]').value
+        console.log(date.value)
+        let annee = date.split('-')[0];
+        let mois =date.split('-')[1];
+        let jour =date.split('-')[2]
+        let dateTache = `${jour}/${mois}/${annee}`
+        let dateAEnvoyer = {
+            idtache: props,
+            echeance: dateTache
+        }
+        let reponse = await changerDateTache(dateAEnvoyer)
+        console.log(reponse)
+        let etapes = await getEtapes(props);
+        setEtapesTache(etapes)
+    
+    }
 }   
 
 
-function checkEtape(idEtape) {
+async function checkEtape(props) {
     // a gérer quand on check les étapes
+    let check = document.getElementById(`${props}`).checked;
+
+    let etape = {
+        idetape: props,
+        checked: check
+    }
+    let reponse = await updateEtape(etape);
+    
 }
 

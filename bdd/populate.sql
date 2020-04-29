@@ -21,7 +21,7 @@ DROP SEQUENCE IF EXISTS SeqIDlistes;
 DROP SEQUENCE IF EXISTS SeqIDtaches;
 DROP SEQUENCE IF EXISTS SeqIDetapes;
 
-set datestyle to "ISO, DMY";
+
 -- METTEZ TOUT AU SINGULIER
 -- >Les IDutilsateur commence par ressemblent à "1XXXXX" 
 -- >>Les IDliste commence par ressemblent à "2XXXXX"
@@ -66,17 +66,17 @@ CREATE TABLE tache
   contenuTache VARCHAR(50),
   note VARCHAR(255),
   checked BOOLEAN DEFAULT FALSE,
-  echeance DATE DEFAULT CURRENT_DATE
+  echeance VARCHAR(10)
 );
 
 CREATE SEQUENCE SeqIDtache START WITH 30000 INCREMENT BY 1;
 ALTER TABLE tache ADD CONSTRAINT PK_IDtache PRIMARY KEY(IDtache);
 
 -- Tache appartenant à la liste "coucou"
-INSERT INTO tache(IDtache, contenuTache, IDliste) VALUES (nextval('SeqIDtache'), 'Finir le projet', 20000);
+INSERT INTO tache(IDtache, contenuTache,echeance, IDliste) VALUES (nextval('SeqIDtache'),'Finir le projet','25/05/2020', 20000);
 -- Tache appartenant à la liste "Yeah"
-INSERT INTO tache(IDtache, contenuTache, IDliste) VALUES (nextval('SeqIDtache'), 'Bosser le projet', 20001);
-INSERT INTO tache(IDtache, contenuTache, IDliste) VALUES (nextval('SeqIDtache'), 'En chier pour le projet', 20001);
+INSERT INTO tache(IDtache, contenuTache, echeance, IDliste) VALUES (nextval('SeqIDtache'), 'Bosser le projet','25/05/2020', 20001);
+INSERT INTO tache(IDtache, contenuTache, echeance, IDliste) VALUES (nextval('SeqIDtache'), 'En chier pour le projet','25/05/2020', 20001);
 
 CREATE TABLE etape
 (
@@ -90,7 +90,7 @@ CREATE SEQUENCE SeqIDetape START WITH 40000 INCREMENT BY 1;
 ALTER TABLE etape ADD CONSTRAINT PK_IDetape PRIMARY KEY(IDetape);
 
 -- Etape appartenant à la tache "Bosser le projet"
-INSERT INTO etape(IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), 'Commencer la base de donnée SQL', 30001);
+INSERT INTO etape(IDetape, checked, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), TRUE, 'Commencer la base de donnée SQL', 30001);
 INSERT INTO etape(IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), 'Tester la BDD sous Oracle SQL', 30001);
 INSERT INTO etape(IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), 'Se rendre compte que Oracle SQL et PostgreSQL ont des difference', 30001);
 INSERT INTO etape(IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), 'Pester pendant 24h pourquoi tout le monde ne fait pas le même SQL', 30001);
