@@ -266,7 +266,7 @@ async function AjoutTache(e, props) {
         let tacheAAjouter = {
             idliste: props,
             contenutache: texteTache,
-            echance: new Date()
+            echeance: new Date()
         }
         let reponse = await createTache(tacheAAjouter);
         setToutesTaches(prevTaches => [...prevTaches, reponse])

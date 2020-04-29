@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 
 // Pour le mailer, a modifier 
 router.get('/email', (req, res) => {
-  envoiMail.sendEmail(destinataire/* destinataire = une fonction pour mettre l'adresse email ici */, (err, result) => {
+  envoiMail.sendEmail(destinataire/* destinataire = une fonction pour mettre l'adresse email de l'utilisateur ici */, (err, result) => {
     if (err) {
       res.status(500).json({ message: err });
       return;
@@ -132,7 +132,7 @@ app.post('/listes/ajout', (req, res) => {
 
 app.post('/taches/ajout', (req, res) => {
   
-  getSQL.addTacheToListe(req.body.contenutache, req.body.idliste, req.body.echance, (err,result) => {
+  getSQL.addTacheToListe(req.body.contenutache, req.body.note, req.body.idliste, req.body.echeance, (err,result) => {
     if (err) {
       res.status(500).json([{ message: result }]);
       return;
@@ -141,9 +141,10 @@ app.post('/taches/ajout', (req, res) => {
     res.json({
       idtache: result.idtache,
       contenutache: result.contenutache,
+      note: result.note,
       idliste: result.idliste,
       checked: result.checked,
-      echeance: result.echance
+      echeance: result.echeance
     })
   })
 });

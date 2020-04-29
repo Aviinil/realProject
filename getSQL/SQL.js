@@ -59,9 +59,9 @@ function deleteListe(IDliste, callback) {
 }
 
 /* Fonction qui ajoute une tache dans une liste precise à partir d'une "IDliste" */
-function addTacheToListe( contenuTache, IDliste, echance , callback) {
-  const query = "INSERT INTO tache (IDtache, contenuTache, IDliste, echance) VALUES (nextval('SeqIDtache'), $1, $2, $3) RETURNING *";
-  utils.executeQuery(query, [contenuTache, IDliste, echance], (err, result) => {
+function addTacheToListe( contenuTache, IDliste, echeance , callback) {
+  const query = "INSERT INTO tache (IDtache, contenuTache, IDliste, echeance) VALUES (nextval('SeqIDtache'), $1, $2, $3) RETURNING *";
+  utils.executeQuery(query, [contenuTache, IDliste, echeance], (err, result) => {
     if (err) {
       callback(true, result);
     } else {
