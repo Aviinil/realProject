@@ -30,7 +30,7 @@ export function BarreTache(props) {
                     {etapesTache.map((etape,index) => 
                         <div key={index} className="etapes" >
                             <div className="tache-etapes">
-                                <input type="checkbox"  checked={etape.checked ? true:false} onChange={()=>checkEtape(etape.idetape)} />
+                                <input type="checkbox" defaultChecked={etape.checked ? true:false} onChange={()=>checkEtape(etape.idetape)} />
                                 <input type="text" className="input-etapes" name="etape" defaultValue={etape.contenuetape} required></input>
                             </div >
                             <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">

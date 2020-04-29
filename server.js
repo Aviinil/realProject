@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // Pour le mailer, a modifier 
-router.get('/email', (req, res) => {
+app.get('/email', (req, res) => {
   envoiMail.sendEmail(destinataire/* destinataire = une fonction pour mettre l'adresse email de l'utilisateur ici */, (err, result) => {
     if (err) {
       res.status(500).json({ message: err });

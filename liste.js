@@ -26,7 +26,7 @@ export function ListeTaches() {
                 let taches = await getTaches(liste[i].idliste);               
                 taches.forEach(tache => {
                     tachesTab.push(tache)
-                    
+                    console.log(tache)
                 });
                 
             }
@@ -262,11 +262,13 @@ function FocusListe(props) {
 async function AjoutTache(e, props) {
     if (e.keyCode == 13) {
         let texteTache = document.querySelector('input[name="ajouter-tache"]').value;
-        
+        let date = new Date();
+        let dateCorrecte = new Intl.DateTimeFormat('en-GB').format(date);
+        console.log(dateCorrecte)
         let tacheAAjouter = {
             idliste: props,
             contenutache: texteTache,
-            echeance: new Date()
+            echeance: dateCorrecte
         }
         let reponse = await createTache(tacheAAjouter);
         setToutesTaches(prevTaches => [...prevTaches, reponse])

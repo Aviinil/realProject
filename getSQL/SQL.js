@@ -63,6 +63,8 @@ function addTacheToListe( contenuTache, IDliste, echeance , callback) {
   const query = "INSERT INTO tache (IDtache, contenuTache, IDliste, echeance) VALUES (nextval('SeqIDtache'), $1, $2, $3) RETURNING *";
   utils.executeQuery(query, [contenuTache, IDliste, echeance], (err, result) => {
     if (err) {
+      console.log(err)
+      console.log(result)
       callback(true, result);
     } else {
       callback(undefined, result.rows[0]);

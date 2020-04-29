@@ -21,7 +21,7 @@ DROP SEQUENCE IF EXISTS SeqIDlistes;
 DROP SEQUENCE IF EXISTS SeqIDtaches;
 DROP SEQUENCE IF EXISTS SeqIDetapes;
 
-
+set datestyle to "ISO, DMY";
 -- METTEZ TOUT AU SINGULIER
 -- >Les IDutilsateur commence par ressemblent à "1XXXXX" 
 -- >>Les IDliste commence par ressemblent à "2XXXXX"
@@ -36,7 +36,7 @@ CREATE TABLE utilisateur
   secured_password VARCHAR(60)
 );
 
-CREATE SEQUENCE SeqIDutilisateur START WITH 10000 INCREMENT BY 10;
+CREATE SEQUENCE SeqIDutilisateur START WITH 10000 INCREMENT BY 1;
 ALTER TABLE utilisateur ADD CONSTRAINT PK_IDutilisateur PRIMARY KEY(IDutilisateur);
 
 -- ID: test@gmail.com Pass: password
@@ -51,7 +51,7 @@ CREATE TABLE liste
  
 );
 
-CREATE SEQUENCE SeqIDliste START WITH 20000 INCREMENT BY 10;
+CREATE SEQUENCE SeqIDliste START WITH 20000 INCREMENT BY 1;
 ALTER TABLE liste ADD CONSTRAINT PK_IDliste PRIMARY KEY(IDliste);
 
 -- Ces 2 listes appartiennent à l'utilisateur "test"(numero 10000)
@@ -66,17 +66,17 @@ CREATE TABLE tache
   contenuTache VARCHAR(50),
   note VARCHAR(255),
   checked BOOLEAN DEFAULT FALSE,
-  echeance TIMESTAMP
+  echeance DATE DEFAULT CURRENT_DATE
 );
 
-CREATE SEQUENCE SeqIDtache START WITH 30000 INCREMENT BY 10;
+CREATE SEQUENCE SeqIDtache START WITH 30000 INCREMENT BY 1;
 ALTER TABLE tache ADD CONSTRAINT PK_IDtache PRIMARY KEY(IDtache);
 
 -- Tache appartenant à la liste "coucou"
 INSERT INTO tache(IDtache, contenuTache, IDliste) VALUES (nextval('SeqIDtache'), 'Finir le projet', 20000);
 -- Tache appartenant à la liste "Yeah"
-INSERT INTO tache(IDtache, contenuTache, IDliste) VALUES (nextval('SeqIDtache'), 'Bosser le projet', 20010);
-INSERT INTO tache(IDtache, contenuTache, IDliste) VALUES (nextval('SeqIDtache'), 'En chier pour le projet', 20010);
+INSERT INTO tache(IDtache, contenuTache, IDliste) VALUES (nextval('SeqIDtache'), 'Bosser le projet', 20001);
+INSERT INTO tache(IDtache, contenuTache, IDliste) VALUES (nextval('SeqIDtache'), 'En chier pour le projet', 20001);
 
 CREATE TABLE etape
 (
@@ -86,12 +86,12 @@ CREATE TABLE etape
   contenuEtape VARCHAR(100)
 );
 
-CREATE SEQUENCE SeqIDetape START WITH 40000 INCREMENT BY 10;
+CREATE SEQUENCE SeqIDetape START WITH 40000 INCREMENT BY 1;
 ALTER TABLE etape ADD CONSTRAINT PK_IDetape PRIMARY KEY(IDetape);
 
 -- Etape appartenant à la tache "Bosser le projet"
-INSERT INTO etape(IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), 'Commencer la base de donnée SQL', 30010);
-INSERT INTO etape(IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), 'Tester la BDD sous Oracle SQL', 30010);
-INSERT INTO etape(IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), 'Se rendre compte que Oracle SQL et PostgreSQL ont des difference', 30010);
-INSERT INTO etape(IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), 'Pester pendant 24h pourquoi tout le monde ne fait pas le même SQL', 30010);
-INSERT INTO etape(IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), 'HAAAAAAAAAAAAAA!!!!!!!!!!!', 30010);
+INSERT INTO etape(IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), 'Commencer la base de donnée SQL', 30001);
+INSERT INTO etape(IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), 'Tester la BDD sous Oracle SQL', 30001);
+INSERT INTO etape(IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), 'Se rendre compte que Oracle SQL et PostgreSQL ont des difference', 30001);
+INSERT INTO etape(IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), 'Pester pendant 24h pourquoi tout le monde ne fait pas le même SQL', 30001);
+INSERT INTO etape(IDetape, contenuEtape, IDtache) VALUES (nextval('SeqIDetape'), 'HAAAAAAAAAAAAAA!!!!!!!!!!!', 30001);
