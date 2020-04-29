@@ -9,7 +9,7 @@ body {
   font-family :'Roboto', sans-serif;
 }
 path {
-  fill: salmon;
+  fill: #FF7675;
 }
 
 .delete-icon {
@@ -52,10 +52,12 @@ input {
   width: 100%;
 }
 .Button {
-  background-color: salmon;
+  background-color:#FF7675;
   color : white;
   text-decoration:none;
-  
+}
+.Button:hover{
+  background-color:#E06867;
 }
 
 
@@ -64,7 +66,7 @@ input {
     text-align: center;
 }
 .links {
-  color: salmon;
+  color: #FF7675;
   text-decoration: none;
   padding-bottom: 10px;
 }
@@ -140,7 +142,7 @@ h6 {
 }
 
 .compteur {
-  background-color: salmon;
+  background-color: #FF7675;
   color: white;
   margin-left: auto ;
   padding: 1% 2.5% 0;
@@ -212,7 +214,7 @@ input[type=checkbox]:hover {
 
 /* When the radio button is checked, add a salmon background */
 input[type=checkbox]:checked  {
-  background-color: salmon;
+  background-color: #FF7675;
   background-image: url('../assets/check.svg');
   background-position: center;
   background-repeat: no-repeat;
@@ -473,7 +475,7 @@ h4 {
   }
   .accueil-mobile {
     display: flex;
-    background-color: salmon;
+    background-color: #FF7675;
     flex-basis: 6%;
     margin-bottom: 5%;
     color: white;
