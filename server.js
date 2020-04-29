@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const config = require("./config.js");
 let bodyParser = require('body-parser')
 let cors = require('cors')
-const envoiMail = require("../mailer"); // Pour le mailer de Saïd -- Jack
+const envoiMail = require("./mailer/mailer"); // Pour le mailer de Saïd -- Jack
 const getSQL = require("./getSQL/SQL"); // pour moi quand je créerai des fonctions -- Jack
 let app = express()
 
