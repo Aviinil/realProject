@@ -14,7 +14,7 @@ app.use(bodyParser.json())
 
 // Pour le mailer, a modifier 
 /* destinataire = une fonction pour mettre l'adresse email de l'utilisateur ici */
-/*
+
 app.get('/email', (req, res) => {
   envoiMail.sendEmail(destinataire, (err, result) => {
     if (err) {
@@ -24,7 +24,7 @@ app.get('/email', (req, res) => {
     res.json({ message: 'Message sent: ' + result.response });
 
   });
-});*/
+});
 
 app.get('/listes/:id([0-9]*)', (req, res) => {
   getSQL.getListeFromUtilisateur(req.params.id, (err, result) => {

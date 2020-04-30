@@ -41,14 +41,14 @@ function create( email, password, callback) {
       }
     });
 
-  });/*
+  });
   mailer.sendEmail(email, (err, result) => {
     if (err) {
       callback(true, err);
     } else {
       return email;
     }
-  });*/
+  });
 }
 
 /********************************* Fonction d'authentification *********************************************/

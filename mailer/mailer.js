@@ -10,6 +10,9 @@ async function sendEmail(destinataire, callback) {
       auth: {
         user: testAccount.user, // generated ethereal user
         pass: testAccount.pass // generated ethereal password
+      },
+      tls: {
+          rejectUnauthorized: false
       }
     });
     
@@ -26,10 +29,9 @@ async function sendEmail(destinataire, callback) {
     callback(false, info);
 
 }
-/*
+
 sendEmail().catch(console.error);
 
 module.exports = {
     sendEmail
  };
-*/
