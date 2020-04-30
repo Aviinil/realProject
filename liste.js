@@ -231,18 +231,21 @@ export function ListeTaches() {
             }
 
             let reponse = await createList(newListe);
+            console.log(reponse)
             setListes(prevListes => [...prevListes, reponse])
+            setDetailListe(reponse)
         }
         
         
     }
+    function SideTask(props) {
+
+        showTaches ? setShowTaches(false) : setShowTaches(true);
+        setTacheChoisie(props);
+    }
     function InfoTache() {
 
-        function SideTask(props) {
-
-            showTaches ? setShowTaches(false) : setShowTaches(true);
-            setTacheChoisie(props);
-        }
+        
 
         return (
             <div className="main__taches">
@@ -250,16 +253,24 @@ export function ListeTaches() {
                 <div  className="taches-liste"> 
                     {toutesTaches.map((tache, index) =>  
                         <div key={index} className="taches-liste-unique">
-                            <input type="checkbox" className={tache.idtache} defaultChecked={tache.checked} onChange={() => RayerTache(tache)} />
-                            <div className="tache-unique" id={tache.idtache}>
-                            <div className="container-nom-tache" onClick={() => SideTask(tache)} >{tache.contenutache}</div>
+                            <div className="tache-first-line">
+                                <input type="checkbox" className={tache.idtache} defaultChecked={tache.checked} onChange={() => RayerTache(tache)} />
+                                <div className="tache-unique" id={tache.idtache}>
+                                <div className="container-nom-tache" onClick={() => SideTask(tache)} >{tache.contenutache}</div>
 
-                            <div className="delete-div" onClick={() =>fonctionDeleteTache(tache.idtache)}><svg width="24" height="24" className="delete-icon" fill="none" 
-                            xmlns="http://www.w3.org/2000/svg" >
-                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"  />
-                            </svg></div>
-                            
-                            </div>                          
+                                <div className="delete-div" onClick={() =>fonctionDeleteTache(tache.idtache)}><svg width="24" height="24" className="delete-icon" fill="none" 
+                                xmlns="http://www.w3.org/2000/svg" >
+                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"  />
+                                </svg></div>
+                                
+                                </div>     
+                            </div>     
+                            <div className="tache-second-line" >
+                                <ul>
+                                    <li>Echeance : {tache.echeance} </li>
+                                    <li>Note : {tache.note} </li>
+                                </ul>
+                            </div>                
                         </div>
                     )}
                 
@@ -292,17 +303,24 @@ export function ListeTaches() {
                 <div className="taches-liste"> 
                     {tachesListes.map((tache, index) =>  
                         <div key={index} className="taches-liste-unique">
-                            <input type="checkbox" className={tache.idtache} defaultChecked={tache.checked} onChange={() => RayerTache(tache)} />
-                            <div className="tache-unique" id={tache.idtache}>
-                            <div className="container-nom-tache"onDoubleClick={showTaches ? () =>setShowTaches(false): () =>setShowTaches(true)} onClick={ () => setTacheChoisie(tache) }>
-                                {tache.contenutache}</div>
+                            <div className="tache-first-line">
+                                <input type="checkbox" className={tache.idtache} defaultChecked={tache.checked} onChange={() => RayerTache(tache)} />
+                                <div className="tache-unique" id={tache.idtache}>
+                                <div className="container-nom-tache" onClick={() => SideTask(tache)} >{tache.contenutache}</div>
 
-                            <div className="delete-div" onClick={() => fonctionDeleteTache(tache.idtache)}><svg width="24" height="24" className="delete-icon" fill="none" 
-                            xmlns="http://www.w3.org/2000/svg" >
-                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"  />
-                            </svg></div>
-                            
-                            </div>                          
+                                <div className="delete-div" onClick={() =>fonctionDeleteTache(tache.idtache)}><svg width="24" height="24" className="delete-icon" fill="none" 
+                                xmlns="http://www.w3.org/2000/svg" >
+                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"  />
+                                </svg></div>
+                                
+                                </div>     
+                            </div>     
+                            <div className="tache-second-line">
+                                <ul>
+                                    <li>Echeance : {tache.echeance} </li>
+                                    <li>Note : {tache.note} </li>
+                                </ul>
+                            </div>                
                         </div>
                     )}
                     
@@ -382,7 +400,7 @@ export function ListeTaches() {
             idtache: props.idtache,
             checked: check
         }
-
+       
         let reponse = await updateTache(tache);
        
     }

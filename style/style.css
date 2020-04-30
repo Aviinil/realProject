@@ -233,7 +233,28 @@ display: flex;
 border-top: 1px solid #ccc;
 margin-left: 10px;
 padding-top: 10px;
+flex-direction: column;
 }
+.tache-first-line {
+  display: flex;
+  flex-direction: row;
+}
+.tache-second-line {
+  display: flex;
+  flex-direction: row;
+  color: grey;
+  font-size: small;
+  margin-left: 5px;
+  margin-top: -15px;
+}
+.tache-second-line ul {
+  display: flex;
+  flex-direction: row;
+}
+.tache-second-line li {
+  width : 180px;
+}
+
 .tache-finale {
   border-bottom: 1px solid #ccc;
   margin-left: 10px;
@@ -361,6 +382,7 @@ fieldset textarea {
 }
 .ajout-tache {
   color: grey;
+  flex-direction: row;
 }
 .ajout-tache path {
   fill: black;
