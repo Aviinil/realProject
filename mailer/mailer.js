@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 
 
 async function sendEmail(destinataire, callback) {
+
     let transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
@@ -21,7 +22,7 @@ async function sendEmail(destinataire, callback) {
         to: destinataire,
         subject: "Confirmation d'inscription", 
         text: "Projet Web Saïd/Clement/Jacky", 
-        html: "<b>Ceci est un test</b>"
+        html: "<p><b>Félicitations pour votre inscription</b> </p><p> Veuillez aller <a href='http://localhost:1234'>ici</></p>"
     });
     console.log("Message envoyé: %s", info.messageId);
     console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
@@ -29,7 +30,6 @@ async function sendEmail(destinataire, callback) {
 
 }
 
-sendEmail().catch(console.error);
 
 module.exports = {
     sendEmail
