@@ -294,3 +294,23 @@ export async function updateMdp(mdp) {
   }
   return data
 }
+
+export async function verifUtilisateur(IDutilisateur) {
+  let url = getEndpointURL(`/activate/${IDutilisateur}`)
+
+  let response = await fetch(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(tache)
+  })
+ 
+  let data = await response.json()
+
+  if (response.status >= 300) {
+    throw new Error(data.message)
+  }
+  return data
+  
+}

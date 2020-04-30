@@ -33,6 +33,7 @@ CREATE TABLE utilisateur
 (
   IDutilisateur INTEGER,
   email VARCHAR(50),
+  activate BOOLEAN DEFAULT FALSE,
   secured_password VARCHAR(60)
 );
 
@@ -40,7 +41,8 @@ CREATE SEQUENCE SeqIDutilisateur START WITH 10000 INCREMENT BY 1;
 ALTER TABLE utilisateur ADD CONSTRAINT PK_IDutilisateur PRIMARY KEY(IDutilisateur);
 
 -- ID: test@gmail.com Pass: password
-INSERT INTO utilisateur(IDutilisateur, email, secured_password) VALUES (nextval('SeqIDutilisateur'), 'test@gmail.com', '$2b$10$qQGzUHQlo/Yy7SWVjCaruuR692KRzD1XhuyqXlz6hWejdBl9I7r/a');
+INSERT INTO utilisateur(IDutilisateur, email, activate, secured_password) VALUES (nextval('SeqIDutilisateur'), 'test@gmail.com', 'FALSE', '$2b$10$qQGzUHQlo/Yy7SWVjCaruuR692KRzD1XhuyqXlz6hWejdBl9I7r/a');
+-- UPDATE utilisateur SET activate = 'TRUE' WHERE IDutilisateur=10000;
 
 -- création table liste
 CREATE TABLE liste

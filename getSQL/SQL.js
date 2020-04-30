@@ -16,8 +16,22 @@ module.exports = {
     checkTache,
     modifTache,
     modifMail,
-    modifMdp
+    modifMdp,
+    VerifUtilisateur
   };
+
+function VerifUtilisateur(IDutilisateur, callback) {
+  const query = "UPDATE utilisateur SET activate = 'TRUE' WHERE IDutilisateur=$1";
+  utils.executeQuery(query, [IDutilisateur], (err, result) => {
+    if (err) {
+      callback(true, err);
+    } else if (result.rows.length === 0) {
+      callback(true, `Impossible de retrouver l'utilisateur ${IDutilisateur}`);
+    } else {
+      callback(undefined, result.rows[0]);
+    }
+  });
+}
 
 
 /* Fonction qui créer une liste pour un utilisateur precis à partir d'un "IDutilisateur" */

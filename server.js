@@ -26,6 +26,7 @@ app.get('/email', (req, res) => {
   });
 });
 */
+
 app.get('/listes/:id([0-9]*)', (req, res) => {
   getSQL.getListeFromUtilisateur(req.params.id, (err, result) => {
     
@@ -310,4 +311,16 @@ app.patch('/mdp/modif', (req, res) => {
 });
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000')
+})
+
+app.patch('/activate/:id([0-9]*)', (req, res) => {
+  getSQL.VerifUtilisateur(req.params.id, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: false });
+      return;
+    }
+    res.json({
+      message: true
+    })
+  })
 })
