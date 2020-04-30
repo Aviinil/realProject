@@ -1,14 +1,18 @@
 const nodemailer = require('nodemailer');
 
-async function sendEmail(destinataire, callback) {
-    let transporter = nodemailer.createTransport({
-        host: "Gmail",
-        auth: {
-            user: "todolist.dutas@gmail.com", // Bon on reflechira apres pour proteger les logins
-            pass: "DUTAS2020"  
-        }
-    });
 
+async function sendEmail(destinataire, callback) {
+    let testAccount = await nodemailer.createTestAccount();
+    let transporter = nodemailer.createTransport({
+      host: "smtp.ethereal.email",
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: testAccount.user, // generated ethereal user
+        pass: testAccount.pass // generated ethereal password
+      }
+    });
+    
     /*****   todolist.dutas@gmail.com     m2p: DUTAS2020    ***/
     let info = await transporter.sendMail({
         from: 'todolist.dutas@gmail.com ', 
@@ -22,6 +26,9 @@ async function sendEmail(destinataire, callback) {
     callback(false, info);
 
 }
+
+sendEmail().catch(console.error);
+
 module.exports = {
     sendEmail
  };

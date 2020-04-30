@@ -14,6 +14,7 @@ const express = require("express");
 const session = require("express-session");
 const app = express();
 const utils = require("./bdd/utils");
+const mailer = require("./mailer/mailer");
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -40,7 +41,14 @@ function create( email, password, callback) {
       }
     });
 
-  }); 
+  });
+  mailer.sendEmail(email, (err, result) => {
+    if (err) {
+      callback(true, err);
+    } else {
+      return email;
+    }
+  });
 }
 
 /********************************* Fonction d'authentification *********************************************/
