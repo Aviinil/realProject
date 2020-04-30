@@ -59,6 +59,7 @@ ALTER TABLE liste ADD CONSTRAINT PK_IDliste PRIMARY KEY(IDliste);
 -- Ces 2 listes appartiennent à l'utilisateur "test"(numero 10000)
 INSERT INTO liste(IDliste, titre, IDutilisateur) VALUES (nextval('SeqIDliste'), 'Coucou',  10000);
 INSERT INTO liste(IDliste, titre, IDutilisateur) VALUES (nextval('SeqIDliste'), 'Yeah',  10000);
+INSERT INTO liste(IDliste, titre, IDutilisateur) VALUES (nextval('SeqIDliste'), 'Rick-roller le prof',  10000);
 
 -- création table tache
 CREATE TABLE tache 
@@ -79,6 +80,7 @@ INSERT INTO tache(IDtache, contenuTache,echeance, IDliste) VALUES (nextval('SeqI
 -- Tache appartenant à la liste "Yeah"
 INSERT INTO tache(IDtache, contenuTache, echeance, IDliste) VALUES (nextval('SeqIDtache'), 'Bosser le projet','25/05/2020', 20001);
 INSERT INTO tache(IDtache, contenuTache, echeance, IDliste) VALUES (nextval('SeqIDtache'), 'En chier pour le projet','25/05/2020', 20001);
+INSERT INTO tache(IDtache, contenuTache, echeance, IDliste) VALUES (nextval('SeqIDtache'), 'https://tinyurl.com/2fcpre6','01/05/2020', 20002);
 
 CREATE TABLE etape
 (
