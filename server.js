@@ -103,6 +103,7 @@ app.post('/utilisateurs/signin', (req, res) => {
 
   users.create(req.body.email, req.body.password, (err, result) => {
     if (err) {
+      console.log(result)
       res.status(500).json({ message: result });
       return;
     }

@@ -22,33 +22,41 @@ app.use(express.urlencoded({ extended: true }));
 /********************************* Fonction création nouveau utilisateur *********************************************/
 function create( email, password, callback) {
 
-  //Cryptage du mot de passe
-  bcrypt.hash(password, 10, (err, encryptedPasswordHash) => {
+  const prequery = "SELECT * FROM utilisateur WHERE email=$1";
+  utils.executeQuery(prequery, [email], (err, result) => {
+    if (result.rows.length === 0) {
+          //Cryptage du mot de passe
+      bcrypt.hash(password, 10, (err, encryptedPasswordHash) => {
 
-    var keep = encryptedPasswordHash;
-    // Sauvegarde de l'utilisateur en base de données
-    const query = "INSERT INTO utilisateur (IDutilisateur, email, secured_password) VALUES (nextval('SeqIDutilisateur'), $1, $2) RETURNING *";
-    utils.executeQuery(query, [email, encryptedPasswordHash], (err, result) => {
-      if (err) {
-        callback(true, err);
-        console.log(err)
-        console.log(result)
-      } else {
-        // On passe l'utilisateur crée comme paramètre de la callback
-        const createdUser = result.rows[0];
-        delete createdUser.encrypted_password;
-        callback(undefined, createdUser);
-      }
-    });
+        var keep = encryptedPasswordHash;
+        // Sauvegarde de l'utilisateur en base de données
+        const query = "INSERT INTO utilisateur (IDutilisateur, email, secured_password) VALUES (nextval('SeqIDutilisateur'), $1, $2) RETURNING *";
+        utils.executeQuery(query, [email, encryptedPasswordHash], (err, result) => {
+          if (err) {
+            callback(true, err);
+            console.log(err)
+            console.log(result)
+          } else {
+            // On passe l'utilisateur crée comme paramètre de la callback
+            const createdUser = result.rows[0];
+            delete createdUser.encrypted_password;
+            callback(undefined, createdUser);
+          }
+        });
 
-  });
-  mailer.sendEmail(email, (err, result) => {
-    if (err) {
-      callback(true, err);
+      });
+      mailer.sendEmail(email, (err, result) => {
+        if (err) {
+          callback(true, err);
+        } else {
+          return email;
+        }
+      });
     } else {
-      return email;
+      callback(true, "Adresse e-mail déjà enregistrée")
     }
-  });
+  })
+  
 }
 
 /********************************* Fonction d'authentification *********************************************/

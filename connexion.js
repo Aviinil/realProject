@@ -222,19 +222,19 @@ async function InscriptionEnCours() {
         password: inputMdp
     }
     let reponse = await inscrire(compte)
-
-    
-    // A faire :
     // si mail est déjà enregistré
     
     let mail = document.querySelector('.erreur-connexion-mail');
+    if (reponse.message === "Adresse e-mail déjà enregistrée"){
     mail.innerHTML="Cette adresse e-mail est déjà utilisée";
+    } else {
     //mail envoyé si reussi
     let mailE = document.querySelector('.completed');
     mailE.innerHTML="Un mail de confirmation vous a été envoyé";
-    
+    }
+    setTimeout(()=>window.location.reload(), 2000)
     history.replaceState(null, null, 'http://localhost:1234');
-    window.location.reload();
+    
     
 }
 async function InscriptionEnCoursE(e) {
