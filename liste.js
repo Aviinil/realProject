@@ -7,6 +7,7 @@ import { SidebarOn, Close } from './mobile';
 import { getIdUser } from './connexion.js';
 
 
+
 export function ListeTaches() {
     let user = getIdUser();
     let [showTaches, setShowTaches] = useState(false);
@@ -35,7 +36,7 @@ export function ListeTaches() {
        
         fetchList()
     }, [])
-
+    
     function Home() {
         // retour à l'ecran d'accueil en cliquant sur la petite maison sidebar top
         setShowParam(false);
@@ -46,7 +47,7 @@ export function ListeTaches() {
 
     function Params() {
         setShowParam(true);
-
+        setShowTaches(false);
         setTitreMobile("Paramètres");
     }
     async function fonctionDeleteListe(props) {
@@ -70,7 +71,6 @@ export function ListeTaches() {
             let taches = await getTaches(liste[i].idliste);               
             taches.forEach(tache => {
                 tachesTab.push(tache)
-                console.log(tache)
             });
             
         }
@@ -162,7 +162,7 @@ export function ListeTaches() {
                 {showParam ?
                 <>
                 <h2>Paramètres</h2>
-                <Parametres/>
+                <Parametres user={user}/>
                 </>
                 :
                 (detailListe == null) ? 
@@ -182,7 +182,12 @@ export function ListeTaches() {
         </div>
         
     );
-
+    function GetDetailListe(props) {
+        setDetailListe(props);
+        setShowParam(false)
+        setShowTaches(false);
+        setTitreMobile(props.titre);
+    }
     function TitreListe(props) {
         let [showForm, setShowForm] = useState(false);
         
@@ -192,8 +197,7 @@ export function ListeTaches() {
         
                     <p>
                     
-                        <input type="text" name="nouvelleListe" placeholder="Intitulé de la liste" required></input>
-                        <input type="submit" className="Button" value="Ajouter liste" onClick={ ()=>AjoutListe(props.idutil)} required></input>
+                        <input type="text" name="nouvelleListe" placeholder="Intitulé de la liste" onKeyPress={ ()=>AjoutListe(event ,props.idutil)} required></input>
                     </p>
                 </div>
             )
@@ -202,7 +206,7 @@ export function ListeTaches() {
             <div className="titres">
                 {props.listes.map((liste, index) => {
                     
-                    return <div key={index} className="titre-liste" onClick={() =>setDetailListe(liste)}> {liste.titre} 
+                    return <div key={index} className="titre-liste" onClick={() =>GetDetailListe(liste)}> {liste.titre} 
                     <span className="compteur"> <NbTache liste={liste} taches ={toutesTaches}/>
                         </span></div>
                 })}
@@ -217,17 +221,18 @@ export function ListeTaches() {
         
     }
     
-    async function AjoutListe(props) {
-       let titreListe = document.querySelector('input[name="nouvelleListe"]').value;
-        let newListe = {
-            idutil: props,
-            titre: titreListe
-        }
+    async function AjoutListe(e, props) {
 
-        let reponse = await createList(newListe);
-        setListes(prevListes => [...prevListes, reponse])
-        console.log(reponse)
-       
+        if (e.keyCode == 13) {
+        let titreListe = document.querySelector('input[name="nouvelleListe"]').value;
+            let newListe = {
+                idutil: props,
+                titre: titreListe
+            }
+
+            let reponse = await createList(newListe);
+            setListes(prevListes => [...prevListes, reponse])
+        }
         
         
     }
@@ -273,9 +278,6 @@ export function ListeTaches() {
                 tachesListes.push(tache)
             }
         })
-        //fait apparaitre un msg d'erreur rouge (puis qu'on modife un state ds liste tache alors qu on est ds focus liste, mais
-        // comme ils sont imbriqués ...)
-        setTitreMobile(props.liste.titre);
        
         return (
             <>
@@ -325,9 +327,9 @@ export function ListeTaches() {
                     </div>
 
                     <div className="taches-liste-unique ajout-tache">
-                        <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg" onClick={() => AjoutTache(props.liste.idliste)}>
                         <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#000"/></svg>
-                        <div> <input type="text" name="ajouter-tache" placeholder="Ajouter une tâche ..." onKeyPress={()=>AjoutTache(event, props.liste.idliste)} required></input></div>   
+                        <div> <input type="text" name="ajouter-tache" placeholder="Ajouter une tâche ..." onKeyPress={()=>AjoutTacheE(event, props.liste.idliste)} required></input></div>   
                     </div>
                     <div className="tache-finale"></div>
                 </div>
@@ -336,14 +338,13 @@ export function ListeTaches() {
 
     }
    
-    async function AjoutTache(e, props) {
+    async function AjoutTacheE(e, props) {
         if (e.keyCode == 13) {
             let texteTache = document.querySelector('input[name="ajouter-tache"]').value;
             let date = new Date();
 
             let dateCorrecte = new Intl.DateTimeFormat('en-GB').format(date).toString();
-            console.log(dateCorrecte)
-            console.log(props)
+
             let tacheAAjouter = {
                 idliste: props,
                 contenutache: texteTache,
@@ -355,6 +356,21 @@ export function ListeTaches() {
             
         }
         
+    }
+    async function AjoutTache(props) {
+    
+        let texteTache = document.querySelector('input[name="ajouter-tache"]').value;
+        let date = new Date();
+
+        let dateCorrecte = new Intl.DateTimeFormat('en-GB').format(date).toString();
+
+        let tacheAAjouter = {
+            idliste: props,
+            contenutache: texteTache,
+            echeance: dateCorrecte
+        }
+        let reponse = await createTache(tacheAAjouter);
+        setToutesTaches(prevTaches => [...prevTaches, reponse])     
     }
 
     async function RayerTache(props) {
@@ -393,6 +409,8 @@ function NbTache(props) {
     
     return i;
 }
+
+
 
 
 

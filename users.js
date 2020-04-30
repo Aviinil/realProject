@@ -41,14 +41,14 @@ function create( email, password, callback) {
       }
     });
 
-  });
+  });/*
   mailer.sendEmail(email, (err, result) => {
     if (err) {
       callback(true, err);
     } else {
       return email;
     }
-  });
+  });*/
 }
 
 /********************************* Fonction d'authentification *********************************************/
@@ -57,7 +57,7 @@ function authenticate( email, password , callback) {
   // Si l'utilisateur existe pas -> Erreur 
   const query = "SELECT * FROM utilisateur WHERE email=$1";
   utils.executeQuery(query, [email], (err, result) => {
-    if (err) {
+    if (err || result.rows.length === 0) {
       callback(true, err);
     } 
 

@@ -13,8 +13,10 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 // Pour le mailer, a modifier 
+/* destinataire = une fonction pour mettre l'adresse email de l'utilisateur ici */
+/*
 app.get('/email', (req, res) => {
-  envoiMail.sendEmail(destinataire/* destinataire = une fonction pour mettre l'adresse email de l'utilisateur ici */, (err, result) => {
+  envoiMail.sendEmail(destinataire, (err, result) => {
     if (err) {
       res.status(500).json({ message: err });
       return;
@@ -22,7 +24,7 @@ app.get('/email', (req, res) => {
     res.json({ message: 'Message sent: ' + result.response });
 
   });
-});
+});*/
 
 app.get('/listes/:id([0-9]*)', (req, res) => {
   getSQL.getListeFromUtilisateur(req.params.id, (err, result) => {
@@ -97,11 +99,9 @@ app.get('/utilisateurs/login/:email/:password', (req, res) => {
   
 })
 
-app.post('/utilisateurs/signin/:email/:password', (req, res) => {
-  let mail = req.params.email;
-  let mdp = req.params.password
+app.post('/utilisateurs/signin', (req, res) => {
 
-  users.create(mail, mdp, (err, result) => {
+  users.create(req.body.email, req.body.password, (err, result) => {
     if (err) {
       res.status(500).json({ message: result });
       return;
@@ -237,9 +237,9 @@ app.patch('/taches', (req, res) => {
   })
 });
 
-app.patch('/taches/date', (req, res) => {
-  
-  getSQL.dateTache(req.body.idtache, req.body.echeance, (err, result) => {
+app.patch('/taches/modif', (req, res) => {
+  // prendre toutes les valeurs de la sidebar
+  getSQL.modifTache(req.body.idtache,req.body.contenutache, req.body.echeance, req.body.note, (err, result) => {
     if (err) {
       res.status(500).json({ message: result });
       return;
@@ -251,6 +251,62 @@ app.patch('/taches/date', (req, res) => {
   })
 });
 
+app.patch('/email/modif', (req, res) => {
+  
+  getSQL.modifMail(req.body.idutil,req.body.mail, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: false });
+      return;
+    }
+
+    res.json({
+      message: true
+    })
+  })
+});
+
+app.get('/parametres/verif/:email/:mdp', (req, res) => {
+  let mail = req.params.email;
+  let mdp = req.params.mdp;
+  users.authenticate(mail, mdp , (err, result) => {
+    if (err) {
+      console.log("erreur")
+      res.status(500).json({ message: result });
+      return;
+    }
+    const userFound = result;
+    if (userFound) {
+      
+      res.json({
+        Util: userFound,
+        message: 'Authentication successful!',
+        mdp : true
+        
+      });
+    } else {
+      res.status(403).json({
+        message: 'Incorrect username or password'
+        
+      });
+    }
+  });
+  
+})
+
+
+app.patch('/mdp/modif', (req, res) => {
+  
+  getSQL.modifMdp(req.body.idutil,req.body.mdp, (err, result) => {
+    if (err) {
+      res.status(500).json({ message: false });
+      return;
+    }
+
+    res.json({
+      message: true
+    })
+  })
+});
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000')
 })

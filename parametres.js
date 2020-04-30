@@ -1,12 +1,14 @@
 import React from 'react';
+import {updateMail, VerifMdp, updateMdp} from './api';
 
 
-export function Parametres() {
+export function Parametres(props) {
+
     return (
 
         <div className="parametres">
             <h4>Adresse e-mail</h4>
-            <div className="parametres--mail-actuel"><b>Adresse e-mail actuelle :</b> mail@utilisateur.com </div>
+            <div className="parametres--mail-actuel"><b>Adresse e-mail actuelle :</b> {props.user.email} </div>
             <div > 
                 <p>
                     <label htmlFor="newEmail"> Nouvelle adresse e-mail </label>
@@ -24,7 +26,7 @@ export function Parametres() {
                     <span className="erreur-connexion mail-different"></span>
                 </p>
                 <p>
-                    <input type="submit" value ="Modifier l'adresse e-mail" className="Button" onClick={ChangerMail}></input>
+                    <input type="submit" value ="Modifier l'adresse e-mail" className="Button" onClick={() => ChangerMail(props.user.idutilisateur)}></input>
                 </p>
             </div>
 
@@ -53,7 +55,7 @@ export function Parametres() {
                     <span className="erreur-connexion mdp-different"></span>
                 </p>
                 <p>
-                    <input type="submit" value ="Modifier le mot de passe" className="Button" onClick={ChangerMdp}></input>
+                    <input type="submit" value ="Modifier le mot de passe" className="Button" onClick={() =>ChangerMdp(props.user)}></input>
                 </p>
             </div>
 
@@ -79,20 +81,26 @@ function VerifParamMail() {
     
 }
 
-function ChangerMail() {
+async function ChangerMail(props) {
+    
     let inputMail = document.querySelector('.input-mail');
     let inputMail2 = document.querySelector('.input-mail2');
-    let erreurMail = document.querySelector('.mail-different');
+    let infoMail = document.querySelector('.mail-different');
     if(inputMail.value !== inputMail2.value) {
-        erreurMail.innerHTML ="Les adresses mails ne correspondent pas"
+        infoMail.innerHTML ="Les adresses mails ne correspondent pas"
+    } else {
+        let newMail = {
+            idutil: props,
+            mail: inputMail.value
+        }
+        let reponse = await updateMail(newMail);
+        reponse.message ? infoMail.innerHTML ="Adresse e-mail changée" : infoMail.innerHTML ="Erreur dans le changement d'adresse e-mail"
     }
 }
 
+
 function VerifParamMdp() {
-    /*let currentMdp = document.querySelector('.input-current-mdp');
-    // verifier que le mdp actuel est bien le bon. fetch ?
-    // message d'erreur dans .erreur-current-mdp
-*/
+ 
     let mdp = document.querySelector('.erreur-new-mdp');
     let inputMdp = document.querySelector('.input-new-mdp');
     if(inputMdp.value === "")
@@ -107,11 +115,26 @@ function VerifParamMdp() {
         mdp2.innerHTML=""  ;
 }
 
-function ChangerMdp() {
+async function ChangerMdp(props) {
     let inputMdp = document.querySelector('.input-new-mdp');
     let inputMdp2 = document.querySelector('.input-new-mdp2');
-    let erreurMdp = document.querySelector('.mdp-different');
+    let infoMdp = document.querySelector('.mdp-different');
+    let mdpActuel = document.querySelector('.input-current-mdp');
     if(inputMdp.value !== inputMdp2.value) {
-        erreurMdp.innerHTML ="Les mots de passe ne correspondent pas"
+        infoMdp.innerHTML ="Les mots de passe ne correspondent pas"
+    } else {        
+        let  email= props.email;
+        let mdp= mdpActuel.value;
+        
+        let mdpValide = await VerifMdp(email, mdp)
+        
+        if (mdpValide.mdp) {
+            let newMdp = {
+                idutil: props.idutilisateur,
+                mdp: inputMdp.value
+            }
+            let reponse = await updateMdp(newMdp);
+            reponse.message ? infoMdp.innerHTML ="Mot de passe changé" : infoMdp.innerHTML ="Erreur dans le changement de mot de passe"
+        }
     }
 }

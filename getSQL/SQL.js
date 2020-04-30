@@ -1,5 +1,5 @@
 const utils = require("../bdd/utils");
-
+const bcrypt = require('bcrypt');
 // Fonction utilisable par l'exterieur
 // <!>Je vais tout mettre au singulier parce que je m'emmele les pinceaux<!>
 module.exports = {
@@ -14,7 +14,9 @@ module.exports = {
     deleteEtape,
     checkEtape,
     checkTache,
-    dateTache
+    modifTache,
+    modifMail,
+    modifMdp
   };
 
 
@@ -139,13 +141,13 @@ function checkTache(idtache, checked, callback) {
   });
 }
 
-function dateTache(idtache, echeance, callback) {
-  const query = "UPDATE tache SET echeance=$1 WHERE IDtache=$2";
-  utils.executeQuery(query, [echeance, idtache], (err, result) => {
+function modifTache(idtache, contenu, echeance, note, callback) {
+  const query = "UPDATE tache SET contenuTache=$1, echeance=$2, note=$3  WHERE IDtache=$4";
+  utils.executeQuery(query, [contenu, echeance, note, idtache], (err, result) => {
     if (err) {
       callback(true, err);
     } else {
-      callback(undefined, "date changée");
+      callback(undefined, "tache changée");
     }
   });
 }
@@ -183,5 +185,29 @@ function checkEtape(idetape, checked, callback) {
     } else {
       callback(undefined, "etape cochée");
     }
+  });
+}
+
+function modifMail(idutil, email, callback) {
+  const query = "UPDATE utilisateur SET email=$1 WHERE IDutilisateur=$2";
+  utils.executeQuery(query, [email, idutil], (err, result) => {
+    if (err) {
+      callback(true, err);
+    } else {
+      callback(false);
+    }
+  });
+}
+
+function modifMdp(idutil, mdp, callback) {
+  bcrypt.hash(mdp, 10, (err, encryptedPasswordHash) => {
+    const query = "UPDATE utilisateur SET secured_password=$1 WHERE IDutilisateur=$2";
+    utils.executeQuery(query, [encryptedPasswordHash, idutil], (err, result) => {
+      if (err) {
+        callback(true, err);
+      } else {
+        callback(false);
+      }
+    });
   });
 }

@@ -216,7 +216,14 @@ async function InscriptionEnCours() {
 
     let inputMail = document.querySelector('.input-mail').value;
     let inputMdp = document.querySelector('.input-mdp').value;
-    let reponse = await inscrire(inputMail, inputMdp)
+
+    let compte = {
+        email: inputMail,
+        password: inputMdp
+    }
+    let reponse = await inscrire(compte)
+
+    
     // A faire :
     // si mail est déjà enregistré
     
@@ -234,7 +241,12 @@ async function InscriptionEnCoursE(e) {
     if (e.keyCode == 13) {
         let inputMail = document.querySelector('.input-mail').value;
         let inputMdp = document.querySelector('.input-mdp').value;
-        let reponse = await inscrire(inputMail, inputMdp)
+
+        let compte = {
+            email: inputMail,
+            password: inputMdp
+        }
+        let reponse = await inscrire(compte)
         // A faire :
         // si mail est déjà enregistré
         /*

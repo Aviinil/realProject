@@ -26,9 +26,10 @@ async function sendEmail(destinataire, callback) {
     callback(false, info);
 
 }
-
+/*
 sendEmail().catch(console.error);
 
 module.exports = {
     sendEmail
  };
+*/

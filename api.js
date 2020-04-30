@@ -49,10 +49,15 @@ export async function authentifier(email, password) {
   return data
 }
 
-export async function inscrire(email, password) {
-  let url = getEndpointURL(`/utilisateurs/signin/${email}/${password}`)
-  let myInit = { method: 'POST'}
-  let response = await fetch(url, myInit)
+export async function inscrire(compte) {
+  let url = getEndpointURL(`/utilisateurs/signin`)
+
+  let response = await fetch(url, { method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(compte)
+  })
 
   // 👉 Parser la réponse en JSON
   let data = await response.json();
@@ -123,8 +128,7 @@ export async function createEtape(etape) {
 
 export async function deleteList(idlist) {
   let url = getEndpointURL('/listes')
-  console.log("test 2 ")
-  console.log(idlist)
+
   let response = await fetch(url, {
     method: 'DELETE',
     headers: {
@@ -221,9 +225,9 @@ export async function updateTache(tache) {
   
 }
 
-export async function changerDateTache(tache) {
+export async function modifierTache(tache) {
 
-  let url = getEndpointURL('/taches/date')
+  let url = getEndpointURL('/taches/modif')
 
   let response = await fetch(url, {
     method: 'PATCH',
@@ -231,6 +235,56 @@ export async function changerDateTache(tache) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(tache)
+  })
+ 
+  let data = await response.json()
+
+  if (response.status >= 300) {
+    throw new Error(data.message)
+  }
+  return data
+}
+
+export async function updateMail(mail) {
+
+  let url = getEndpointURL('/email/modif')
+
+  let response = await fetch(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(mail)
+  })
+ 
+  let data = await response.json()
+
+  if (response.status >= 300) {
+    throw new Error(data.message)
+  }
+  return data
+}
+
+export async function VerifMdp(email, mdp) {
+  let url = getEndpointURL(`/parametres/verif/${email}/${mdp}`)
+  let response = await fetch(url)
+  // 👉 Parser la réponse en JSON
+  let data = await response.json();
+
+  // 👉 Renvoyer les données
+  return data
+}
+
+export async function updateMdp(mdp) {
+
+  let url = getEndpointURL('/mdp/modif')
+
+  let response = await fetch(url, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(mdp)
   })
  
   let data = await response.json()

@@ -5,7 +5,7 @@
 }
 
 body {
-  max-width: 1600px;
+  max-width: 100%;
   font-family :'Roboto', sans-serif;
 }
 path {
@@ -26,6 +26,7 @@ path {
 }
 .container-fluid {
   display: flex;
+ 
 }
 .container__connexion {
   display: flex;
@@ -363,6 +364,9 @@ fieldset textarea {
 }
 .ajout-tache path {
   fill: black;
+}
+.ajout-tache svg {
+  cursor: pointer;
 }
 .ajout-tache div {
   margin-left: 15px;
