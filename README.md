@@ -1,16 +1,16 @@
 # realProject
 Projet web client riche
 
-npm install
+npm install :
 Installer toute les dépendances nécessaire du projet.
 
-npm run initbdd
+npm run initbdd :
 Cela initialise une base de donnée avec un un utilisateur par défaut
 
-node server
+node server :
 Lance le serveur
 
-npm run watch
+npm run watch :
 Lance le client
 
 Compte test : 
