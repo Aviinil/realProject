@@ -224,16 +224,18 @@ export function ListeTaches() {
     async function AjoutListe(e, props) {
 
         if (e.keyCode == 13) {
-        let titreListe = document.querySelector('input[name="nouvelleListe"]').value;
-            let newListe = {
-                idutil: props,
-                titre: titreListe
-            }
+            let titreListe = document.querySelector('input[name="nouvelleListe"]').value;
+            if (titreListe.replace(/ /g, '') !== '') {
+                let newListe = {
+                    idutil: props,
+                    titre: titreListe
+                }
 
-            let reponse = await createList(newListe);
-            console.log(reponse)
-            setListes(prevListes => [...prevListes, reponse])
-            setDetailListe(reponse)
+                let reponse = await createList(newListe);
+                console.log(reponse)
+                setListes(prevListes => [...prevListes, reponse])
+                setDetailListe(reponse)
+            }
         }
         
         
@@ -268,7 +270,7 @@ export function ListeTaches() {
                             <div className="tache-second-line" >
                                 <ul>
                                     <li>Echeance : {tache.echeance} </li>
-                                    <li>Note : {tache.note} </li>
+                                    <li id='liste-note'>Note : {tache.note} </li>
                                 </ul>
                             </div>                
                         </div>
@@ -331,14 +333,14 @@ export function ListeTaches() {
                             Êtes-vous certain(e) de vouloir supprimer la liste "{props.liste.titre}" </p>
                             <div className="delete-buttons">
                                 <div className="suppression-definitive" onClick={()=> fonctionDeleteListe(props.liste.idliste)}>
-                                <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4h-3.5z" fill="#fff"/>
-                                </svg> Supprimer la liste
+                                    <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm2.46-7.12l1.41-1.41L12 12.59l2.12-2.12 1.41 1.41L13.41 14l2.12 2.12-1.41 1.41L12 15.41l-2.12 2.12-1.41-1.41L10.59 14l-2.13-2.12zM15.5 4l-1-1h-5l-1 1H5v2h14V4h-3.5z" fill="#fff"/>
+                                    </svg> Supprimer la liste
                                 </div>
                                 <div className="annuler" >
-                                <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="#fff"/>
-                                </svg> Annuler
+                                    <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="#fff"/>
+                                    </svg> Annuler
                                 </div>
                             </div>
                         </div>
@@ -359,18 +361,20 @@ export function ListeTaches() {
     async function AjoutTacheE(e, props) {
         if (e.keyCode == 13) {
             let texteTache = document.querySelector('input[name="ajouter-tache"]').value;
-            let date = new Date();
+            if (texteTache.replace(/ /g, '') !== '') {
+                
+                let date = new Date();
 
-            let dateCorrecte = new Intl.DateTimeFormat('en-GB').format(date).toString();
+                let dateCorrecte = new Intl.DateTimeFormat('en-GB').format(date).toString();
 
-            let tacheAAjouter = {
-                idliste: props,
-                contenutache: texteTache,
-                echeance: dateCorrecte
+                let tacheAAjouter = {
+                    idliste: props,
+                    contenutache: texteTache,
+                    echeance: dateCorrecte
+                }
+                let reponse = await createTache(tacheAAjouter);
+                setToutesTaches(prevTaches => [...prevTaches, reponse])
             }
-            let reponse = await createTache(tacheAAjouter);
-            setToutesTaches(prevTaches => [...prevTaches, reponse])
-            
             
         }
         
@@ -378,17 +382,20 @@ export function ListeTaches() {
     async function AjoutTache(props) {
     
         let texteTache = document.querySelector('input[name="ajouter-tache"]').value;
-        let date = new Date();
+            if (texteTache.replace(/ /g, '') !== '') {
+                
+                let date = new Date();
 
-        let dateCorrecte = new Intl.DateTimeFormat('en-GB').format(date).toString();
+                let dateCorrecte = new Intl.DateTimeFormat('en-GB').format(date).toString();
 
-        let tacheAAjouter = {
-            idliste: props,
-            contenutache: texteTache,
-            echeance: dateCorrecte
-        }
-        let reponse = await createTache(tacheAAjouter);
-        setToutesTaches(prevTaches => [...prevTaches, reponse])     
+                let tacheAAjouter = {
+                    idliste: props,
+                    contenutache: texteTache,
+                    echeance: dateCorrecte
+                }
+                let reponse = await createTache(tacheAAjouter);
+                setToutesTaches(prevTaches => [...prevTaches, reponse])
+            }
     }
 
     async function RayerTache(props) {

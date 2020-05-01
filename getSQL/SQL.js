@@ -19,7 +19,7 @@ module.exports = {
     modifMdp,
     VerifUtilisateur
   };
-
+/// en cours
 function VerifUtilisateur(IDutilisateur, callback) {
   const query = "UPDATE utilisateur SET activate = 'TRUE' WHERE IDutilisateur=$1";
   utils.executeQuery(query, [IDutilisateur], (err, result) => {

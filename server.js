@@ -4,28 +4,12 @@ const jwt = require('jsonwebtoken');
 const config = require("./config.js");
 let bodyParser = require('body-parser')
 let cors = require('cors')
-const envoiMail = require("./mailer/mailer"); // Pour le mailer de Saïd -- Jack
 const getSQL = require("./getSQL/SQL"); // pour moi quand je créerai des fonctions -- Jack
 let app = express()
 
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-
-// Pour le mailer, a modifier 
-/* destinataire = une fonction pour mettre l'adresse email de l'utilisateur ici */
-/*
-app.get('/email', (req, res) => {
-  envoiMail.sendEmail(destinataire, (err, result) => {
-    if (err) {
-      res.status(500).json({ message: err });
-      return;
-    }
-    res.json({ message: 'Message sent: ' + result.response });
-
-  });
-});
-*/
 
 app.get('/listes/:id([0-9]*)', (req, res) => {
   getSQL.getListeFromUtilisateur(req.params.id, (err, result) => {

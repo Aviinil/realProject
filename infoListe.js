@@ -77,7 +77,21 @@ export function BarreTache(props) {
     async function AjoutEtapeE(e, props) {
         if (e.keyCode == 13) {
             let texteEtape = document.querySelector('input[name="ajout-etape"]');
-            
+            if (texteEtape.value.replace(/ /g, '') !== '') {
+                let etapeAAjouter = {
+                    idtache: props,
+                    contenuetape: texteEtape.value
+                }
+                let reponse = await createEtape(etapeAAjouter);
+                setEtapesTache(prevEtapes => [...prevEtapes, reponse])
+                texteEtape.value="";
+            }
+        }
+    }
+    async function AjoutEtape(props) {
+        
+        let texteEtape = document.querySelector('input[name="ajout-etape"]');
+        if (texteEtape.value.replace(/ /g, '') !== '') {
             let etapeAAjouter = {
                 idtache: props,
                 contenuetape: texteEtape.value
@@ -85,23 +99,7 @@ export function BarreTache(props) {
             let reponse = await createEtape(etapeAAjouter);
             setEtapesTache(prevEtapes => [...prevEtapes, reponse])
             texteEtape.value="";
-            
         }
-    }
-    async function AjoutEtape(props) {
-        
-        let texteEtape = document.querySelector('input[name="ajout-etape"]');
-        
-        let etapeAAjouter = {
-            idtache: props,
-            contenuetape: texteEtape.value
-        }
-        let reponse = await createEtape(etapeAAjouter);
-        setEtapesTache(prevEtapes => [...prevEtapes, reponse])
-        texteEtape.value="";
-        
-    
-        
     }
 
     async function FonctionDeleteEtape(props) {

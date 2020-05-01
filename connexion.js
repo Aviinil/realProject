@@ -42,8 +42,6 @@ function Connexion() {
         
             <div className="container-fluid">
                 <div className="container__connexion">
-                    
-                    
                         <p>
                             <label htmlFor="email"> Adresse e-mail </label>
                             <br/>
@@ -226,14 +224,17 @@ async function InscriptionEnCours() {
     
     let mail = document.querySelector('.erreur-connexion-mail');
     if (reponse.message === "Adresse e-mail déjà enregistrée"){
-    mail.innerHTML="Cette adresse e-mail est déjà utilisée";
+        mail.innerHTML="Cette adresse e-mail est déjà utilisée";
     } else {
-    //mail envoyé si reussi
-    let mailE = document.querySelector('.completed');
-    mailE.innerHTML="Un mail de confirmation vous a été envoyé";
+        //mail envoyé si reussi
+        let mailE = document.querySelector('.completed');
+        mailE.innerHTML="Un mail de confirmation vous a été envoyé";
+        setTimeout(()=>window.location.reload(), 2000)
+        history.replaceState(null, null, 'http://localhost:1234');
+
     }
-    setTimeout(()=>window.location.reload(), 2000)
-    history.replaceState(null, null, 'http://localhost:1234');
+    
+    
     
     
 }
@@ -247,17 +248,19 @@ async function InscriptionEnCoursE(e) {
             password: inputMdp
         }
         let reponse = await inscrire(compte)
-        // A faire :
         // si mail est déjà enregistré
-        /*
+        
         let mail = document.querySelector('.erreur-connexion-mail');
-        mail.innerHTML="Cette adresse e-mail est déjà utilisée";
-        //mail envoyé si reussi
-        let mailE = document.querySelector('.completed');
-        mailE.innerHTML="Un mail de confirmation vous a été envoyé";
-        */
-        history.replaceState(null, null, 'http://localhost:1234');
-        window.location.reload();
+        if (reponse.message === "Adresse e-mail déjà enregistrée"){
+            mail.innerHTML="Cette adresse e-mail est déjà utilisée";
+        } else {
+            //mail envoyé si reussi
+            let mailE = document.querySelector('.completed');
+            mailE.innerHTML="Un mail de confirmation vous a été envoyé";
+            setTimeout(()=>window.location.reload(), 2000)
+            history.replaceState(null, null, 'http://localhost:1234');
+
+        }
     }
 }
 
